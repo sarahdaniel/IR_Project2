@@ -1,5 +1,7 @@
 import ch.ethz.dal.tinyir.io.TipsterStream
 import ch.ethz.dal.tinyir.lectures.TermFrequencies
+import ch.ethz.dal.tinyir.processing.XMLDocument
+import ch.ethz.dal.tinyir.processing.Tokenizer
 import collection.mutable.{Map => MutMap}
 
 /**
@@ -7,13 +9,16 @@ import collection.mutable.{Map => MutMap}
  */
 object Retrieval {
   
+ val df = MutMap[String,Int]()                  
+ val logtfs = MutMap[String,Map[String,Double]]()
+ 
+ val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
+  val stopWords =io.Source.fromInputStream(stream).mkString.split(",").map(x=> x.trim()) 
+  
 def main (args:Array[String]){
      
   val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-  
-  val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
-  val stopWords =io.Source.fromInputStream(stream).mkString.split(",").map(x=> x.trim())
-  
+    
   val stream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
   val bufferedSource2 = io.Source.fromInputStream(stream2)
      
@@ -28,59 +33,55 @@ def main (args:Array[String]){
   .groupBy(_._1)
   .mapValues(_.map(_._2))      
   
-  println(judgements)
+  //println(judgements)
   
   
-  // !!!! MODIFICATA TIPSTERPARSE.SCALA in tiniyIR x includere il TITOLO !!!!
+  //extract queries
+  val topicinputStream = getClass.getResourceAsStream("/topics")
+  val doc = new XMLDocument(topicinputStream)
+ 
+  val words= doc.title.split("Topic:").map(p=> p.trim()).filter(p=> p!="")
+  val cleanwords = words.map(w=> Tokenizer.tokenize(stripChars(w,".,;:-?!%()[]°'\"\t\n\r\f123456789")).filter(!stopWords.contains(_)))
 
-  val tipster = new TipsterStream(zippath)
-  //val tipster = new TipsterStream ("/Users/ale/workspace/inforetrieval/Documents/searchengine/zips")
-                                                
-   println("Number of files in zips = " + tipster.length)
-                                                 
-   val df = MutMap[String,Int]()                  
-   val logtfs = MutMap[String,Map[String,Double]]()
-                                                      
-   for (doc <- tipster.stream) {
+  val numbers= doc.number.split("Number:").map(p=> p.trim()).filter(p=> p!="").map(p=> p.toInt)
+  
+  val queries=  numbers.zip(cleanwords) 
    
-     val tokens = doc.tokens.filter(!stopWords.contains(_)).map(p=>p.toLowerCase)
-     //println(tokens)
-     
-     
-     df ++= tokens.distinct.map(t => t-> (1+df.getOrElse(t,0)))
-     
-     //logtfs +=  doc.name -> TermFrequencies.logtf(tokens)
-     logtfs +=  doc.name -> logtfSlides(tokens)
-     
-   }
+  //set of all the words of the 40 queries
+  val querywords= cleanwords.flatten.toSet
+  
+  scanDocuments(zippath,querywords)
+  //scanDocuments("/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip2",querywords)
   
   println(df);
   println(logtfs);
   
-  val generalMap = MutMap[Int,Map[String,Double]]()    
-  
-  
-  //-----> for (query <- querylist)  TO DO !!!!! READ QUERIES FROM TOPICS FILE
-  val query =List("support","lead","third","pippopluto")  
- 
+  val generalMap = MutMap[Int,Map[String,Double]]()      
   val numdocs : Int = df.size
   
-  //val d : Map[String,Double] =query.map({case(k) => (k, (Math.log10(df.size) - Math.log10(df.getOrElse(k,c))).toDouble)}).toMap
-  val dfquery : Map[String,Double] =(for (w <- query) yield (w -> (Math.log10(df.size) - Math.log10(df.getOrElse(w,numdocs).toDouble)))).toMap
+for (query <- queries)  {
+
+  println(query)   
   
-  println(dfquery)
+  //document frequency of words in query
+  val dfquery : Map[String,Double] =(for (w <- query._2) yield (w -> (Math.log10(df.size) - Math.log10(df.getOrElse(w,numdocs).toDouble)))).toMap
+  
+  //println(dfquery)
  
   val queryMap = MutMap[String,Double]()    
   
   for (docprob <- logtfs){
       
-      val tfquery=query.map({case(k) => (k, docprob._2 getOrElse(k,0.0))})
+     //term frequency of words in query
+      val tfquery=(query._2).map({case(k) => (k, docprob._2 getOrElse(k,0.0))})
 
-      println(tfquery)
+      //println(tfquery)
+      
+      //TF-IDF
       val tfidf = dfquery.map({case(k,v) => tfquery map({case(x,y) => if(k==x) v*y else 0.0})}).flatten
       val score = tfidf.sum
-      println(tfidf)
-      println(score)
+      //println(tfidf)
+      //println(score)
       
       //save only the best 100 documents for each query, otherwise too much memory occupation
       if (queryMap.size == 100){ 
@@ -95,14 +96,34 @@ def main (args:Array[String]){
   
   //this map contains the best 100 documents for each query in qrels (so 40 x 100 entries)
   // this map must be used to evaluation
-    generalMap += 51 -> queryMap.toMap 
+    generalMap += query._1 -> queryMap.toMap 
     
-    println(queryMap)
+    //println(queryMap)
   
- //-----> } //end for query
+} //end for query
     
-    println(generalMap)
-}   
+    //println(generalMap)
+}  
+ 
+ def scanDocuments(folderpath: String, subsetwords: Set[String])={
+  
+    val tipster = new TipsterStream (folderpath)
+     println("Number of files in zips = " + tipster.length)
+  
+     for (doc <- tipster.stream) {
+   
+     val tokens = doc.tokens.filter(!stopWords.contains(_)).map(p=>p.toLowerCase)
+    
+     //document frequency
+     df ++= tokens.distinct.filter(w=> subsetwords.contains(w)).map(t => t-> (1+df.getOrElse(t,0)))
+     
+     //log of term frequency
+     //logtfs +=  doc.name -> TermFrequencies.logtf(tokens)
+     logtfs +=  doc.name -> logtfSlides(tokens).filter(w=> subsetwords.contains(w._1))
+
+   }
+    
+}
 
 def tf(doc : List[String]) : Map[String, Int] = 
     doc.groupBy(identity).mapValues(l => l.length)
@@ -116,6 +137,8 @@ def logtfSlides(tf: Map[String,Int]) : Map[String, Double] =
     tf.mapValues(v => log2(v.toDouble +1.0))
 
 def log2 (x : Double) = Math.log10(x)/Math.log10(2.0)
+
+def stripChars(s:String, ch:String)= s filterNot (ch contains _)
    
   
 }

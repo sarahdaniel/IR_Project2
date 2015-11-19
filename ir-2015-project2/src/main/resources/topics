@@ -1,29 +1,30 @@
+<topics>
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description </head>
 
 
-<num> Number:  051 
+<num> Number:  051 </num>
 
 
-<dom> Domain:  International Economics
+<dom> Domain:  International Economics</dom>
 
 
-<title> Topic:  Airbus Subsidies
+<title> Topic:  Airbus Subsidies</title>
 
 
 <desc> Description:
 
 Document will discuss government assistance to Airbus Industrie, or mention a
 trade dispute between Airbus and a U.S. aircraft producer over the issue of
-subsidies.
+subsidies.</desc>
 
 
 <smry> Summary:
 
 Document will discuss government assistance to Airbus Industrie, or mention a
 trade dispute between Airbus and a U.S. aircraft producer over the issue of
-subsidies.
+subsidies.</smry>
 
 
 <narr> Narrative:
@@ -32,7 +33,7 @@ A relevant document will cite or discuss assistance to Airbus Industrie by the
 French, German, British or Spanish government(s), or will discuss a trade
 dispute between Airbus or the European governments and a U.S. aircraft
 producer, most likely Boeing Co. or McDonnell Douglas Corp., or the U.S.
-government, over federal subsidies to Airbus.
+government, over federal subsidies to Airbus.</narr>
 
 
 <con> Concept(s):
@@ -53,40 +54,39 @@ government, over federal subsidies to Airbus.
 7. complaint, objection
 
 8. retaliation, anti-dumping duty petition, countervailing duty petition,
-   sanctions
+   sanctions</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
+<def> Definition(s): </def>
 
-
-<def> Definition(s):
 
 </top>
 
+
 <top>
 
-
-<head> Tipster Topic Description
-
-
-<num> Number:  052 
+<head> Tipster Topic Description</head>
 
 
-<dom> Domain:  International Economics
+<num> Number:  052 </num>
 
 
-<title> Topic:  South African Sanctions
+<dom> Domain:  International Economics</dom>
+
+
+<title> Topic:  South African Sanctions</title>
 
 
 <desc> Description:
 
-Document discusses sanctions against South Africa.
+Document discusses sanctions against South Africa.</desc>
 
 
 <smry> Summary:
 
-Document discusses international sanctions against South Africa.
+Document discusses international sanctions against South Africa.</smry>
 
 
 <narr> Narrative:
@@ -99,7 +99,7 @@ against Pretoria imposed by the United Nations; the effects of sanctions
 against S. Africa; opposition to sanctions; or, compliance with sanctions by a
 company.  The document will identify the sanctions instituted or being
 considered, e.g., corporate disinvestment, trade ban, academic boycott, arms
-embargo.
+embargo.</narr>
 
 
 <con> Concept(s):
@@ -115,42 +115,42 @@ embargo.
 
 4. antiapartheid, black majority rule   
 
-5. Pretoria
+5. Pretoria</con>
 
 
 <fac> Factor(s):
 
-<nat> Nationality:  South Africa
+<nat> Nationality:  South Africa </nat>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  053 
+<num> Number:  053 </num>
 
 
-<dom> Domain:  International Economics
+<dom> Domain:  International Economics</dom>
 
 
-<title> Topic:  Leveraged Buyouts  
+<title> Topic:  Leveraged Buyouts  </title>
 
 
 <desc> Description:
 
-Document mentions a leveraged buyout valued at or above 200 million dollars.
+Document mentions a leveraged buyout valued at or above 200 million dollars.</desc>
 
 
 <smry> Summary:
 
-Document mentions a leveraged buyout valued at or above 200 million dollars.
+Document mentions a leveraged buyout valued at or above 200 million dollars.</smry>
 
 
 <narr> Narrative:
@@ -158,7 +158,7 @@ Document mentions a leveraged buyout valued at or above 200 million dollars.
 A relevant document will cite a leveraged buyout (LBO) valued at or above 200
 million dollars.  The LBO may be at any stage, e.g., considered, proposed,
 pending, a fact.  The company (being) taken private must be identified.  The
-offer may be expressed in dollars a share.
+offer may be expressed in dollars a share.</narr>
 
 
 <con> Concept(s):
@@ -167,11 +167,11 @@ offer may be expressed in dollars a share.
 
 2. take private, go private
 
-3. management-led leveraged buyout
+3. management-led leveraged buyout</con>
 
 
 <fac> Factor(s):
-<price> Price:  >= 200 million dollars
+<price> Price:  >= 200 million dollars</price>
 </fac>
 
 
@@ -180,40 +180,40 @@ offer may be expressed in dollars a share.
 Leveraged Buyout (LBO) - Takeover of a company using borrowed funds, with the
 target company's assets serving as security for the loans taken out by the
 acquiring firm, which repays the loans out of the cash flow of the acquired
-company or from the sale of the assets of the acquired firm.
+company or from the sale of the assets of the acquired firm.</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
-<num> Number:  054 
-
-
-<dom> Domain:  International Economics
+<num> Number:  054 </num>
 
 
-<title> Topic:  Satellite Launch Contracts
+<dom> Domain:  International Economics</dom>
+
+
+<title> Topic:  Satellite Launch Contracts</title>
 
 
 <desc> Description:
 
 Document will cite the signing of a contract or preliminary agreement, or the
-making of a tentative reservation, to launch a commercial satellite.
+making of a tentative reservation, to launch a commercial satellite.</desc>
 
 
 <smry> Summary:
 
 Document will cite the signing of a contract or preliminary agreement, or the
-making of a tentative reservation, to launch a commercial satellite.
+making of a tentative reservation, to launch a commercial satellite.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will mention the signing of a contract or preliminary
 agreement , or the making of a tentative reservation, to launch a commercial
-satellite.
+satellite.</narr>
 
 
 <con> Concept(s):
@@ -226,38 +226,38 @@ satellite.
 
 4. Arianespace, Martin Marietta, General Dynamics, McDonnell Douglas
 
-5. Titan, Delta II, Atlas, Ariane, Proton
+5. Titan, Delta II, Atlas, Ariane, Proton</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
 <head> Tipster Topic Description
+</head>
+
+<num> Number:  055 </num>
 
 
-<num> Number:  055 
+<dom> Domain:  International Economics</dom>
 
 
-<dom> Domain:  International Economics
-
-
-<title> Topic:  Insider Trading
+<title> Topic:  Insider Trading</title>
 
 
 <desc> Description:  
 
-Document discusses an insider-trading case.
+Document discusses an insider-trading case.</desc>
 
 
 <smry> Summary:
 
-Document discusses an insider-trading case.
+Document discusses an insider-trading case.</smry>
 
 
 <narr> Narrative:  
@@ -270,7 +270,7 @@ information, possible conspirator's role in the scheme, the monetary amount of
 illegal profit and of damage; if pronounced guilty, then the sentence terms,
 e.g., monetary penalty (cash payment), time in prison, cooperation with the
 government, probation, community service, being barred from the industry for a
-certain time period.
+certain time period.</narr>
 
 
 <con> Concept(s):
@@ -293,10 +293,10 @@ certain time period.
    news, passing a tip
 
 8. pre-bid market activity, takeover speculation, matched-book
-   transaction
+   transaction</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
 <def> Definition(s):
@@ -307,34 +307,34 @@ one of them knows that the company is about to go broke before the others and
 sells his shares while their price is still good, that is unfair.  In many
 countries, including the U.S. and the U.K., it is also illegal.  However, it
 is very difficult to prove that an investor is buying or selling shares on the
-basis of inside information.
+basis of inside information.</def>
 
 </top>
  
 <top>
 
 <head> Tipster Topic Description
+</head>
+
+<num> Number:  056 </num>
 
 
-<num> Number:  056 
+<dom> Domain:  International Finance</dom>
 
 
-<dom> Domain:  International Finance
-
-
-<title> Topic:  Prime (Lending) Rate Moves, Predictions
+<title> Topic:  Prime (Lending) Rate Moves, Predictions</title>
 
 
 <desc> Description:
 
 Document will include a prediction about the prime lending rate, or will
-report an actual prime rate move.
+report an actual prime rate move.</desc>
 
 
 <smry> Summary:
 
 Document will include a prediction about the prime lending rate, or will
-report an actual prime rate move.
+report an actual prime rate move.</smry>
 
 
 <narr> Narrative:
@@ -342,7 +342,7 @@ report an actual prime rate move.
 A relevant document will include a prediction about the prime lending rate
 (national-level or major banks'), or will report a prime rate move by major
 banks, in response to or in anticipation of a federal/national-level action,
-such as a cut in the discount rate.
+such as a cut in the discount rate.</narr>
 
 
 <con> Concept(s):
@@ -354,45 +354,45 @@ such as a cut in the discount rate.
 
 3. foresee, expect, predict, speculate
 
-4. move, increase, decrease, rise, decline, boost, cut 
+4. move, increase, decrease, rise, decline, boost, cut </con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  057 
+<num> Number:  057 </num>
 
 
-<dom> Domain:  U.S. Economics
+<dom> Domain:  U.S. Economics</dom>
 
 
-<title> Topic:  MCI
+<title> Topic:  MCI</title>
 
 
 <desc> Description:
 
-Document will discuss how MCI has been doing since the Bell System breakup.
+Document will discuss how MCI has been doing since the Bell System breakup.</desc>
 
 
 <smry> Summary:
 
 Document will discuss how MCI (Multiport Communications Interface) has
-been doing since the Bell System breakup.
+been doing since the Bell System breakup.</smry>
 
 
 <narr> Narrative:
  
 A relevant document will discuss the financial health of MCI Communications
-Corp. since the breakup of the Bell System (AT&T and the seven regional Baby
+Corp. since the breakup of the Bell System (ATandT and the seven regional Baby
 Bells) in January 1984.  The status indicated may not necessarily be a direct
 or indirect result of the breakup of the system and ensuing regulation and
 deregulation of Ma Bell or of the restrictions placed upon the seven Bells; it
@@ -403,11 +403,11 @@ containing financial data such as a quarterly report; or it may be reflected
 by one or more of the following: credit ratings, share of customers, volume
 growth, cuts in capital spending, $$ figure net loss, pre-tax charge,
 analysts' or MCI's own forecast about how well they will be doing, or MCI's
-response to price cuts that AT&T makes at its own initiative or under orders
+response to price cuts that ATandT makes at its own initiative or under orders
 from the Federal Communications Commission (FCC), such as price reductions,
 layoffs of employees out of a perceived need to cut costs, etc.  Daily OTC
 trading stock market and monthly short interest reports are NOT relevant; the
-inventory must be longer term, at least quarterly.
+inventory must be longer term, at least quarterly.</narr>
 
 
 <con> Concept(s):
@@ -422,7 +422,7 @@ inventory must be longer term, at least quarterly.
 
 5.  profits, revenue, net income, net loss, write-downs
 
-6.  NOT daily OTC trading, NOT monthly short interest
+6.  NOT daily OTC trading, NOT monthly short interest</con>
 
 
 <fac> Factor(s):
@@ -432,34 +432,34 @@ Time:  after January 1984
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  058
+<num> Number:  058</num>
 
 
-<dom> Domain:  International Economics
+<dom> Domain:  International Economics</dom>
 
 
-<title> Topic:  Rail Strikes
+<title> Topic:  Rail Strikes</title>
 
 
 <desc> Description:
 
 Document will predict or anticipate a rail strike or report an ongoing rail 
-strike.  
+strike.  </desc>
 
 
 <smry> Summary:
 
 Document will predict or anticipate a rail strike or report an ongoing rail 
-strike.  
+strike.  </smry>
 
 
 <narr> Narrative:
@@ -471,7 +471,7 @@ the strike or potential strike.  For an impending strike, the document will
 report the status of negotiations, contract talks, etc. to enable an
 assessment of the probability of a strike.  For an ongoing strike, the
 document will report the length of the strike to the current date and the
-status of negotiations or mediation.
+status of negotiations or mediation.</narr>
 
 
 <con> Concept(s):
@@ -482,50 +482,50 @@ status of negotiations or mediation.
 
 3.  union proposal, talks, settlement, featherbedding, cost cutting
 
-4.  working without a contract, expired contract, cooling off period
+4.  working without a contract, expired contract, cooling off period</con>
 
 
 <fac> Factor(s):
 
-<time> Time:  Current
+<time> Time:  Current </time>
 
 </fac>
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  059 
+<num> Number:  059 </num>
 
 
-<dom> Domain:  Environment
+<dom> Domain:  Environment</dom>
 
 
-<title> Topic:  Weather Related Fatalities
+<title> Topic:  Weather Related Fatalities</title>
 
 
 <desc> Description:
 
 Document will report a type of weather event which has directly caused at
-least one fatality in some location.
+least one fatality in some location.</desc>
 
 
 <smry> Summary:
 
 Document will report a type of weather event which has directly caused at
-least one fatality in some location.
+least one fatality in some location.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will include the number of people killed and injured by
 the weather event, as well as reporting the type of weather event and the
-location of the event.
+location of the event.</narr>
 
 
 <con> Concept(s):
@@ -537,28 +537,28 @@ location of the event.
 
 3.  NOT man-made disasters, NOT war-induced famine
 
-4.  NOT earthquakes, NOT volcanic eruptions
+4.  NOT earthquakes, NOT volcanic eruptions</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  060 
+<num> Number:  060 </num>
 
 
-<dom> Domain:  International Economics
+<dom> Domain:  International Economics</dom>
 
 
-<title> Topic:  Merit-Pay vs. Seniority
+<title> Topic:  Merit-Pay vs. Seniority</title>
 
 
 <desc> Description:
@@ -566,7 +566,7 @@ location of the event.
 Document will describe either one or both sides of the controversy over the
 use of standards of performance to determine salary levels and incentive pay
 as contrasted with determining pay solely on the basis of seniority or
-longevity on the job.
+longevity on the job.</desc>
 
 
 <smry> Summary:
@@ -574,7 +574,7 @@ longevity on the job.
 Document will describe either one or both sides of the controversy
 over a change in the use of standards of performance to determine
 salary levels and incentive pay as contrasted with determining pay
-solely on the basis of seniority or longevity on the job.
+solely on the basis of seniority or longevity on the job.</smry>
 
 
 <narr> Narrative:
@@ -585,7 +585,7 @@ merit vs. seniority in paying employees, or name an employee group (union or
 lobbying group) which is protesting a change in merit vs. seniority status for
 a particular employee group.  The change announced should be a move away from
 one policy toward another, not an announcement of across-the-board cuts as a
-cost-cutting measure.
+cost-cutting measure.</narr>
 
 
 <con> Concept(s):
@@ -597,38 +597,38 @@ cost-cutting measure.
 3.  salary, pay, compensation, raise
 
 4.  appraisal, evaluation, assessment, testing, career ladder, peer review,
-    certifying
+    certifying</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  061 
+<num> Number:  061 </num>
 
 
-<dom> Domain:  International Politics
+<dom> Domain:  International Politics</dom>
 
 
-<title> Topic:  Israeli Role in Iran-Contra Affair
+<title> Topic:  Israeli Role in Iran-Contra Affair</title>
 
 
 <desc> Description:
 
-Document will discuss the role of Israel in the Iran-Contra Affair.
+Document will discuss the role of Israel in the Iran-Contra Affair.</desc>
 
 
 <smry> Summary:
 
-Document will discuss the role of Israel in the Iran-Contra Affair.
+Document will discuss the role of Israel in the Iran-Contra Affair.</smry>
 
 
 <narr> Narrative:
@@ -639,7 +639,7 @@ Iran, suggesting diverting profits from sales of arms to Iran to Nicaraguan
 insurgents, participating in diversion of funds to the Contras, kicking back
 money to Iranian officials, kidnapping relatives of top Iranian officials by
 the Mossad (Israeli intelligence service) to be exchanged for U.S. hostages in
-Lebanon, is relevant.
+Lebanon, is relevant.</narr>
 
 
 <con> Concept(s):
@@ -650,47 +650,47 @@ Lebanon, is relevant.
 
 3.  Israeli intermediaries, middlemen, arms dealers, government officials
 
-4.  David Kimche, Michael Ledeen, Jaacov Nimrodi
+4.  David Kimche, Michael Ledeen, Jaacov Nimrodi</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 062
+<num> Number: 062</num>
 
 
-<dom> Domain:  Military
+<dom> Domain:  Military</dom>
 
 
-<title> Topic:  Military Coups D'etat
+<title> Topic:  Military Coups D'etat</title>
 
 
 <desc> Description:
 
 Document will report a military coup d'etat, either attempted or successful,
-in any country.
+in any country.</desc>
 
 
 <smry> Summary:
 
 Document will report a military coup d'etat, either attempted or successful,
-in any country.
+in any country.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will identify the country involved, the group responsible
 for the coup or coup attempt, the target of the coup, and the motivation of
-the coup plotters. It should NOT be about civilian government shake ups.
+the coup plotters. It should NOT be about civilian government shake ups.</narr>
 
 
 <con> Concept(s):
@@ -701,49 +701,49 @@ the coup plotters. It should NOT be about civilian government shake ups.
 
 3.  regime
 
-4.  amnesty
+4.  amnesty</con>
 
 
 <fac> Factor(s):
 
-<Time>  Time:  Current
+<Time>  Time:  Current</Time>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  063 
+<num> Number:  063 </num>
 
 
-<dom> Domain:  Science and Technology
+<dom> Domain:  Science and Technology</dom>
 
 
-<title> Topic:  Machine Translation
+<title> Topic:  Machine Translation</title>
 
 
 <desc> Description:
 
-Document will identify a machine translation system.
+Document will identify a machine translation system.</desc>
 
 
 <smry> Summary:
 
-Document will identify a machine translation system.
+Document will identify a machine translation system.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will identify a machine translation system which is being
 developed or marketed in any country.  It will identify the developer or
-vendor, name the system, and identify one or more features of the system.
+vendor, name the system, and identify one or more features of the system.</narr>
 
 
 <con> Concept(s):
@@ -752,39 +752,39 @@ vendor, name the system, and identify one or more features of the system.
 
 2.  language, dictionary, font
 
-3.  batch, interactive, process, user interface
+3.  batch, interactive, process, user interface</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  064 
+<num> Number:  064 </num>
 
 
-<dom> Domain:  International Relations
+<dom> Domain:  International Relations</dom>
 
 
-<title> Topic:  Hostage-Taking
+<title> Topic:  Hostage-Taking</title>
 
 
 <desc> Description:
 
 Document will report an event or result of politically motivated
-hostage-taking.
+hostage-taking.</desc>
 
 <smry> Summary:
 
 Document will report an event or result of politically motivated
-hostage-taking.
+hostage-taking.</smry>
 
 <narr> Narrative:
 
@@ -792,7 +792,7 @@ A relevant document will report an attempt (successful or unsuccessful) to
 seize a hostage for some political purpose, report on hostages currently held,
 or report a current hostage release event.  The document will identify the
 nationality of the victim, some identification of the perpetrators
-(nationality or religion), and location where the hostage-taking occurred.
+(nationality or religion), and location where the hostage-taking occurred.</narr>
 
 
 <con> Concept(s):
@@ -807,91 +807,91 @@ nationality of the victim, some identification of the perpetrators
 
 5.  captivity, terrorism
 
-6.  captors, hostages, negotiator, victims
+6.  captors, hostages, negotiator, victims</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s): </fac>
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  065
+<num> Number:  065</num>
 
 
-<dom> Domain:  Science and Technology
+<dom> Domain:  Science and Technology</dom>
 
 
-<title> Topic:  Information Retrieval Systems
+<title> Topic:  Information Retrieval Systems</title>
 
 
 <desc> Description:
 
-Document will identify a type of information retrieval system.
+Document will identify a type of information retrieval system.</desc>
 
 
 <smry> Summary:
 
 A relevant document will identify a new information retrieval system, identify
 the company or person marketing the system, and identify some of the
-characteristics of the system.
+characteristics of the system.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will identify an information retrieval system, identify
 the company or person marketing the system, and identify some of the
-characteristics of the system.
+characteristics of the system.</narr>
 
 
 <con> Concept(s):
 
 1.  information retrieval system
 
-2.  storage, database, data, query
+2.  storage, database, data, query</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  066 
+<num> Number:  066 </num>
 
 
-<dom> Domain:  Science and Technology
+<dom> Domain:  Science and Technology</dom>
 
 
-<title> Topic:  Natural Language Processing
+<title> Topic:  Natural Language Processing</title>
 
 
 <desc> Description:
 
 Document will identify a type of natural language processing technology which
-is being developed or marketed in the U.S.
+is being developed or marketed in the U.S.</desc>
 
 <smry> Summary:
 
 Document will identify a type of natural language processing technology which
-is being developed or marketed in the U.S.
+is being developed or marketed in the U.S.</smry>
 
 <narr> Narrative:
 
 A relevant document will identify a company or institution developing or
 marketing a natural language processing technology, identify the technology,
-and identify one or more features of the company's product.
+and identify one or more features of the company's product.</narr>
 
 
 <con> Concept(s):
@@ -900,46 +900,46 @@ and identify one or more features of the company's product.
 
 2.  translation, language, dictionary, font
 
-3.  software applications
+3.  software applications</con>
 
 
 <fac> Factor(s):
 
-<nat>  Nationality:  U.S.
+<nat>  Nationality:  U.S. </nat>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  067 
+<num> Number:  067 </num>
 
 
-<dom> Domain:  International Relations
+<dom> Domain:  International Relations</dom>
 
 
-<title> Topic:  Politically Motivated Civil Disturbances
+<title> Topic:  Politically Motivated Civil Disturbances</title>
 
 
 <desc> Description:
 
 Document will report a current civil disturbance in any country, involving
 citizens of that country protesting a political position of their own
-country's government.
+country's government.</desc>
 
 
 <smry> Summary:
 
 Document will report a current civil disturbance in any country, involving
 citizens of that country protesting a political position of their own
-country's government.
+country's government.</smry>
 
 
 <narr> Narrative:
@@ -949,7 +949,7 @@ of the group causing the disturbance, the nature of the disturbance, the
 identity of the group suppressing the disturbance and the political goals of
 the protesters. It should NOT be about economically-motivated civil
 disturbances and NOT be about a civil disturbance directed against a second
-country.
+country.</narr>
 
 
 <con> Concept(s):
@@ -961,53 +961,53 @@ country.
 
 3.  police, riot police, troops, army, National Guard, government forces
 
-4.  NOT economically-motivated
+4.  NOT economically-motivated</con>
 
 
 <fac> Factor(s):
 
-<time>  Time:  Current
+<time>  Time:  Current</time>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  068
+<num> Number:  068</num>
 
 
-<dom> Domain:  Science and Technology
+<dom> Domain:  Science and Technology</dom>
 
 
-<title> Topic:  Health Hazards from Fine-Diameter Fibers
+<title> Topic:  Health Hazards from Fine-Diameter Fibers</title>
 
 
 <desc> Description:
 
 Document will report actual studies, or even unsubstantiated concerns about
 the safety to manufacturing employees and installation workers of
-fine-diameter fibers used in insulation and other products.
+fine-diameter fibers used in insulation and other products.</desc>
 
 
 <smry> Summary:
 
 Document will report actual studies, or even unsubstantiated concerns about
 the safety to manufacturing employees and installation workers of
-fine-diameter fibers used in insulation and other products.
+fine-diameter fibers used in insulation and other products.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will report the type of fiber in question, and whether the
 fiber has been determined to be harmful or is merely suspected of being
-harmful.
+harmful. </narr>
 
 <con> Concept(s):
 
@@ -1015,42 +1015,42 @@ harmful.
 
 2.  diminished lung capacity, cancer
 
-3.  workplace safety, OSHA
+3.  workplace safety, OSHA</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  069
+<num> Number:  069</num>
 
 
-<dom> Domain:  International Relations
+<dom> Domain:  International Relations</dom>
 
 
-<title> Topic:  Attempts to Revive the SALT II Treaty
+<title> Topic:  Attempts to Revive the SALT II Treaty</title>
 
 
 <desc> Description:
 
 Document will report an attempt by the U.S. House of Representatives or a
 European country to revive the SALT II Treaty ceilings on weapons in order to
-limit President Reagan's military build up.
+limit President Reagan's military build up.</desc>
 
 
 <smry> Summary:
 
 Document will report an attempt by the U.S. House of Representatives or a
 European country to revive the SALT II Treaty ceilings on weapons in order to
-limit President Reagan's military build up.
+limit President Reagan's military build up.</smry>
 
 
 <narr> Narrative:
@@ -1058,7 +1058,7 @@ limit President Reagan's military build up.
 A relevant document will describe an attempt to push the U.S. Administration
 to adhere to the limits on weapons proposed in SALT II.  To be relevant the
 document must identify what group is pushing the policy and what methods they
-are using to influence the U.S. Administration.
+are using to influence the U.S. Administration.</narr>
  
 
 <con> Concept(s):
@@ -1067,10 +1067,10 @@ are using to influence the U.S. Administration.
 
 2.  House, Senate, President, Europe
 
-3.  war, enemy, fight
+3.  war, enemy, fight</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
 <def> Definition(s):
@@ -1078,34 +1078,34 @@ are using to influence the U.S. Administration.
 SALT II - Treaty signed by Carter and Brezhnev in 1979 limiting the number of
 several categories of strategic weapons which the Soviet Union and the U.S.
 would build and deploy.  The treaty was never ratified by the U.S. Senate, and
-expired in 1985.
+expired in 1985.</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  070 
+<num> Number:  070 </num>
 
 
-<dom> Domain:  Law and Government
+<dom> Domain:  Law and Government</dom>
 
 
-<title> Topic:  Surrogate Motherhood
+<title> Topic:  Surrogate Motherhood</title>
 
 
 <desc> Description:
 
 Document will report judicial proceedings and opinions on contracts for
-surrogate motherhood.
+surrogate motherhood.</desc>
 
 
 <smry> Summary:
 
 Document will report judicial proceedings and opinions on contracts for
-surrogate motherhood.
+surrogate motherhood.</smry>
 
 
 <narr> Narrative:
@@ -1114,20 +1114,20 @@ A relevant document will report legal opinions, judgments, and decisions
 regarding surrogate motherhood and the custody of any children which result
 from surrogate motherhood.  To be relevant, a document must identify the case,
 state the issues which are or were being decided and report at least one
-ethical or legal question which arises from the case.
+ethical or legal question which arises from the case.</narr>
  
 
 <con> Concept(s):
 
 1.  surrogate, mothers, motherhood
 
-2.  judge, lawyer, court, lawsuit, custody, hearing, opinion, finding
+2.  judge, lawyer, court, lawsuit, custody, hearing, opinion, finding</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 
 </top>
@@ -1135,30 +1135,30 @@ ethical or legal question which arises from the case.
 <top>
 
 
-<head>  Tipster Topic Description
+<head>  Tipster Topic Description</head>
 
 
-<num>  Number:  071
+<num>  Number:  071</num>
 
 
-<dom>  Domain:  Military
+<dom>  Domain:  Military</dom>
 
 
-<title>  Topic:  Border Incursions
+<title>  Topic:  Border Incursions</title>
 
 
 <desc>  Description:
 
 Document will report incursions by land, air, or water into the border area of
 one country by military forces of a second country or a guerrilla group based
-in a second country.
+in a second country.</desc>
 
 
 <smry> Summary:
 
 Document will report brief incursions by land, air, or water into the
 border area of one country by military forces of a second country or a
-guerrilla group based in a second country.
+guerrilla group based in a second country.</smry>
 
 
 <narr>  Narrative:
@@ -1169,7 +1169,7 @@ or goal must be a military objective. It should NOT be about a war or invasion
 in which troops remain on foreign soil for a sustained engagement. 
 It should NOT be about a territorial dispute or economic dispute (such as
 fishing rights) which is being negotiated or argued by civilian groups.
-
+</narr>
 
 
 <con>  Concept(s):
@@ -1182,40 +1182,40 @@ fishing rights) which is being negotiated or argued by civilian groups.
 
 4.  NOT sustained engagement
 
-5.  NOT fishing rights
+5.  NOT fishing rights </con>
 
-<fac>  Factor(s):
+<fac>  Factor(s):</fac>
 
 
-<def>  Definition(s):
+<def>  Definition(s):</def>
 
 </top>
  
 <top>
 
-<head>  Tipster Topic Description
+<head>  Tipster Topic Description</head>
 
 
-<num>  Number:  072
+<num>  Number:  072</num>
 
 
-<dom>  Domain:  U.S. Economics
+<dom>  Domain:  U.S. Economics</dom>
 
 
-<title>  Topic:  Demographic Shifts in the U.S.
+<title>  Topic:  Demographic Shifts in the U.S.</title>
 
 
 <desc>  Description:
 
 Document will report a movement of people from one area of the U.S. to another
 for a variety of reasons. The movement of population described should be large
-enough to have some economic impact.
+enough to have some economic impact.</desc>
 
 <smry> Summary:
 
 Document will report a movement of people from one area of the U.S. to another
 for a variety of reasons. The movement of population described should be large
-enough to have some economic impact.
+enough to have some economic impact.</smry>
 
 <narr>  Narrative:
 
@@ -1225,7 +1225,7 @@ shift is a gain or loss of population, and give some indication of the
 magnitude of the shift such as a number, percentage, ratio, or ranking.
 The movement of population described should be large
 enough to have some impact on the economy of either the losing area, the
-receiving area, or both.
+receiving area, or both.</narr>
 
 
 <con>  Concept(s):
@@ -1234,45 +1234,45 @@ receiving area, or both.
 
 2.  shift, gain, loss
 
-3.  census
+3.  census</con>
 
 
 <fac>  Factor(s):
 
-<nat>  Nationality:  U.S.
+<nat>  Nationality:  U.S. </nat>
 
 </fac>
 
 
-<def>  Definition(s):
+<def>  Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  073
+<num> Number:  073</num>
 
 
-<dom> Domain:  International Economics
+<dom> Domain:  International Economics</dom>
 
 
-<title> Topic:  Demographic Shifts across National Boundaries
+<title> Topic:  Demographic Shifts across National Boundaries</title>
 
 
 <desc> Description:
 
 Document will report a movement of people from one country to another for a
 variety of reasons. The movement of population described should be large enough
-to have some economic impact.
+to have some economic impact.</desc>
 
 <smry> Summary:
 
 Document will report a movement of people from one country to another for a
 variety of reasons. The movement of population described should be large enough
-to have some economic impact.
+to have some economic impact.</smry>
 
 <narr> Narrative:
 
@@ -1282,7 +1282,7 @@ a gain or loss of population, and give some indication of the magnitude of the
 shift such as a number, percentage, ratio, or ranking.
 The movement of population described should be large enough to
 have some impact on the economy of either the losing country, the receiving
-country, or both.
+country, or both.</narr>
 
 
 <con> Concept(s):
@@ -1291,40 +1291,40 @@ country, or both.
 
 2.  shift, gain, loss
 
-3.  immigration, emigration, deportation, diaspora, exile
+3.  immigration, emigration, deportation, diaspora, exile</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  074 
+<num> Number:  074 </num>
 
 
-<dom> Domain:  Political
+<dom> Domain:  Political</dom>
 
 
-<title> Topic:  Conflicting Policy 
+<title> Topic:  Conflicting Policy </title>
 
 
 <desc> Description:
 
 Document will cite an instance in which the U.S. government propounds two 
-conflicting or opposing policies. 
+conflicting or opposing policies. </desc>
 
 
 <smry> Summary:
 
 Document will cite an instance in which the U.S. government propounds two 
-conflicting or opposing policies. 
+conflicting or opposing policies. </smry>
 
 
 <narr> Narrative:
@@ -1338,51 +1338,51 @@ of interest include: expending funds in the campaign against tobacco use while
 subsidizing the U.S. tobacco industry and the marketing of U.S. tobacco
 products abroad, allowing imports of produce treated with pesticide which is
 banned in the U.S., disapproving the sale of deficient infant formula in the
-U.S. while allowing it to be exported to the third world.
+U.S. while allowing it to be exported to the third world.</narr>
 
 
 <con> Concept(s):
 
 1. condemn, prohibit, ban
 
-2. subsidize
+2. subsidize</con>
 
 
 <fac> Factor(s):
 
-<nat>  Nationality:  U.S.
+<nat>  Nationality:  U.S.</nat>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  075
+<num> Number:  075</num>
 
 
-<dom> Domain:  Science and Technology 
+<dom> Domain:  Science and Technology </dom>
 
 
-<title> Topic:  Automation
+<title> Topic:  Automation</title>
 
 
 <desc> Description:
 
 Document will identify an instance in which automation has clearly paid off,
-or conversely, has failed.
+or conversely, has failed.</desc>
 
 
 <smry> Summary:
 
 Document will identify an instance in which automation has clearly paid off,
-or conversely, has failed.
+or conversely, has failed.</smry>
 
 
 <narr> Narrative:
@@ -1391,7 +1391,7 @@ A relevant document will cite a case in which automation has been at least a
 factor in cutting costs, by either increased efficiency or a smaller payroll
 or both, or a case in which automation has failed for some reason in reducing
 costs, or had disappointing results.  The case may involve an industry or a
-particular firm.
+particular firm.</narr>
  
 
 <con> Concept(s):
@@ -1400,28 +1400,28 @@ particular firm.
 
 2.  increased efficiency, smaller payroll, work force reduction
 
-3.  pay off, cut costs
+3.  pay off, cut costs</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  076
+<num> Number:  076</num>
 
 
-<dom> Domain:  Law and Government 
+<dom> Domain:  Law and Government </dom>
 
 
-<title> Topic:  U.S. Constitution - Original Intent
+<title> Topic:  U.S. Constitution - Original Intent</title>
 
 
 <desc> Description:
@@ -1429,7 +1429,7 @@ particular firm.
 Document will include a discussion of, or debate over, the issue of the
 original intent of the U.S. Constitution, or the meaning of a particular
 amendment to the Constitution, or will present an individual's interpretation
-of an amendment.
+of an amendment.</desc>
 
 
 <smry> Summary:
@@ -1437,7 +1437,7 @@ of an amendment.
 Document will include a discussion of, or debate over, the issue of the
 original intent of the U.S. Constitution, or the meaning of a particular
 amendment to the Constitution, or will present an individual's interpretation
-of an amendment.
+of an amendment.</smry>
 
 
 <narr> Narrative:
@@ -1445,7 +1445,7 @@ of an amendment.
 A relevant document will include a discussion of, or debate over, the issue of
 the original intent of the U.S. Constitution, or the meaning of a particular
 amendment to the Constitution, or will present an individual's interpretation
-of an amendment.  (A mere reference to the problem is not relevant.)
+of an amendment.  (A mere reference to the problem is not relevant.)</narr>
 
 
 <con> Concept(s):
@@ -1453,45 +1453,45 @@ of an amendment.  (A mere reference to the problem is not relevant.)
 1.  U.S. Constitution, separation of powers, body of the Constitution, Bill of
     Rights, First Amendment, Fifth Amendment
 
-2.  original intent
+2.  original intent</con>
   
 
 <fac> Factor(s):
 
-<nat>  Nationality:  U.S.
+<nat>  Nationality:  U.S.</nat>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  077
+<num> Number:  077</num>
 
 
-<dom> Domain:  Environment
+<dom> Domain:  Environment</dom>
 
 
-<title> Topic:  Poaching
+<title> Topic:  Poaching</title>
 
 
 <desc> Description:
 
 Document will report a poaching method used against a certain type of
-wildlife.
+wildlife.</desc>
 
 <smry> Summary:
 
 Document will report specific poaching activities including
 identification of the type of wildlife being poached, the poaching
 technique or method of killing the wildlife which is used by the
-poacher, and the reason for the poaching.
+poacher, and the reason for the poaching.</smry>
 
 <narr> Narrative:
 
@@ -1499,7 +1499,7 @@ A relevant document will identify the type of wildlife being poached, the
 poaching technique or method of killing the wildlife which is used by the
 poacher, and the reason for the poaching (e.g. for a trophy, meat, or money).
 A report of poaching or someone caught for poaching without mention of the
-technique used and the reason is not relevant.
+technique used and the reason is not relevant.</narr>
  
 
 <con> Concept(s):
@@ -1510,40 +1510,40 @@ technique used and the reason is not relevant.
 
 3.  arrest, impound, fine
 
-4.  issue, agreement, license, treaty, legal limit
+4.  issue, agreement, license, treaty, legal limit</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  078
+<num> Number:  078</num>
 
 
-<dom> Domain:  Environment
+<dom> Domain:  Environment</dom>
 
 
-<title> Topic:  Greenpeace
+<title> Topic:  Greenpeace</title>
 
 
 <desc> Description:
 
 Document will report activity by Greenpeace to carry out their environmental
-protection goals.
+protection goals.</desc>
 
 
 <smry> Summary:
 
 Document will report activity by Greenpeace to carry out their environmental
-protection goals.
+protection goals.</smry>
 
 
 <narr> Narrative:
@@ -1551,7 +1551,7 @@ protection goals.
 A relevant document will report a protest action by Greenpeace, citing the
 company or country targeted by the organization, the specific target (such as
 a ship, train, etc.), the action carried out by Greenpeace, and the objective
-which Greenpeace sought to attain.
+which Greenpeace sought to attain.</narr>
  
 
 <con> Concept(s):
@@ -1560,35 +1560,35 @@ which Greenpeace sought to attain.
 
 2.  protest, disrupt, block, harass, scuttle, trespass, confront
 
-3.  anti-nuclear, uranium, radioactive, missile
+3.  anti-nuclear, uranium, radioactive, missile</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  079
+<num> Number:  079</num>
 
 
-<dom> Domain:  International Relations
+<dom> Domain:  International Relations</dom>
 
 
-<title> Topic:  FRG Political Party Positions
+<title> Topic:  FRG Political Party Positions</title>
 
 
 <desc> Description:
 
 Document will identify at least one German political party and report some
 position which the party has taken in regard to a political, social, economic,
-military, environmental, or international objective.
+military, environmental, or international objective.</desc>
 
 
 <smry> Summary:
@@ -1596,14 +1596,14 @@ military, environmental, or international objective.
 Document will identify at least one German political party or faction
 and report some position which the party has taken in regard to a
 political, social, economic, military, environmental, or international
-objective.
+objective.</smry>
 
 
 <narr> Narrative:
 
 A relevant document will report at least one goal or objective of one of the
 German political parties.  The position will be stated clearly enough that the
-reader will be able to understand where the party stands on a specific issue.
+reader will be able to understand where the party stands on a specific issue.</narr>
  
 
 <con> Concept(s):
@@ -1615,44 +1615,44 @@ reader will be able to understand where the party stands on a specific issue.
 
 3.  proponents, advocates, allies
 
-4.  swing, shift, aim, goal
+4.  swing, shift, aim, goal</con>
 
 
 <fac> Factor(s):
 
-<nat>  Nationality:  Germany
+<nat>  Nationality:  Germany</nat>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  080
+<num> Number:  080</num>
 
 
-<dom> Domain:  Political                          
+<dom> Domain:  Political                          </dom>
 
 
-<title> Topic:  1988 Presidential Candidates Platforms
+<title> Topic:  Presidential Candidates Platforms</title>
 
 
 <desc> Description:
 
 Document will identify something about the platform of a 1988 presidential 
-candidate.
+candidate.</desc>
 
 
 <smry> Summary:
 
 Document will identify something about the platform of a 1988 presidential 
-candidate.
+candidate.</smry>
 
 
 <narr> Narrative:
@@ -1661,7 +1661,7 @@ A relevant document will identify something about the platform of a 1988
 presidential candidate: his campaign, plans, promises, philosophy, position on
 an issue, issue(s) important to him, or how he would address an issue if
 elected.  The platform of an individual candidate is of interest; the party
-platform is not relevant.
+platform is not relevant.</narr>
  
 
 <con> Concept(s):
@@ -1674,45 +1674,45 @@ Babbitt, DuPont, Gore, Hart, Biden
 
 3.  presidential candidate, aspirant, contender, hopeful
 
-4.  NOT Democratic party platform, NOT Republican party platform
+4.  NOT Democratic party platform, NOT Republican party platform</con>
 
 
 <fac> Factor(s):
 
-<nat>  Nationality:  U.S.
+<nat>  Nationality:  U.S.</nat>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  081
+<num> Number:  081</num>
 
 
-<dom> Domain:  Finance
+<dom> Domain:  Finance</dom>
 
 
 <title> Topic: Financial crunch for televangelists in the wake of the PTL
-scandal
+scandal</title>
 
 
 <desc> Description:
 
 Document will report a loss of revenue of a televangelist in the aftermath of
-the PTL scandal, or a financial crisis triggered by the scandal.
+the PTL scandal, or a financial crisis triggered by the scandal.</desc>
 
 
 <smry> Summary:
 
 Document will report a loss of revenue of a televangelist in the aftermath of
-the PTL scandal, or a financial crisis triggered by the scandal.
+the PTL scandal, or a financial crisis triggered by the scandal.</smry>
 
 
 <narr> Narrative:
@@ -1720,7 +1720,7 @@ the PTL scandal, or a financial crisis triggered by the scandal.
 A relevant document will identify a religious broadcaster, and report a
 specific dollar amount or a percentage loss, indicating a decline in revenue
 suffered by that broadcaster as a result of consumer reaction to the Jim
-Bakker scandal.
+Bakker scandal.</narr>
  
 
 <con> Concept(s):
@@ -1733,42 +1733,42 @@ Bakker scandal.
 
 4.  religious broadcasters, televangelists
 
-5.  Bakker, Falwell, Robertson, Swaggart, Schuller, Roberts
+5.  Bakker, Falwell, Robertson, Swaggart, Schuller, Roberts</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  082 
+<num> Number:  082 </num>
 
 
-<dom> Domain:  Science and Technology
+<dom> Domain:  Science and Technology</dom>
 
 
-<title> Topic:  Genetic Engineering
+<title> Topic:  Genetic Engineering</title>
 
 
 <desc> Description:  
 
 Document discusses a genetic engineering application, a product that has been,
 is being, or will be developed by genetic manipulation, or attitudes toward
-genetic engineering.
+genetic engineering.</desc>
 
 
 <smry> Summary:
 
 Document discusses a genetic engineering application, a product that has been,
 is being, or will be developed by genetic manipulation, or attitudes toward
-genetic engineering.
+genetic engineering.</smry>
 
 
 <narr> Narrative:
@@ -1777,7 +1777,7 @@ A relevant document will discuss a product, e.g., drug, microorganism,
 vaccine, animal, plant, agricultural product, developed by genetic engineering
 techniques; identify an application, such as to clean up the environment or
 human gene therapy for a specific problem; or, present human attitudes toward
-genetic engineering.
+genetic engineering.</narr>
 
 
 <con> Concept(s):
@@ -1790,40 +1790,40 @@ genetic engineering.
    vaccine, agricultural product
 
 4. cure a disease, clean up the environment, increase agricultural
-   productivity
+   productivity</con>
  
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 083
+<num> Number: 083</num>
 
 
-<dom> Domain: Environment 
+<dom> Domain: Environment </dom>
 
 
-<title> Topic: Measures to Protect the Atmosphere
+<title> Topic: Measures to Protect the Atmosphere</title>
 
 
 <desc> Description:
 
 Document will discuss plans, projects, agreements, treaties, or laws concluded
-or under consideration aimed at protecting the atmosphere.
+or under consideration aimed at protecting the atmosphere.</desc>
 
 
 <smry> Summary:
 
 Document will discuss plans, projects, agreements, treaties, or laws concluded
-or under consideration aimed at protecting the atmosphere.
+or under consideration aimed at protecting the atmosphere.</smry>
 
 
 <narr> Narrative:
@@ -1835,7 +1835,7 @@ identify steps taken or to be taken under the measure and its purpose
 (limiting chlorofluorocarbon emissions, reducing acid rain, containing carbon
 dioxide buildup, or blocking deforestation) and not focus on scientific debate
 or research into such atmospheric phenomena as ozone depletion and global
-warming.
+warming.</narr>
 
 
 <con> Concept(s):
@@ -1846,40 +1846,40 @@ warming.
 
 3.  Deforestation
 
-4.  Chlorofluorocarbons   
+4.  Chlorofluorocarbons   </con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 084
+<num> Number: 084</num>
 
 
-<dom> Domain: U.S. Economics 
+<dom> Domain: U.S. Economics </dom>
 
 
-<title> Topic: Alternative/renewable Energy Plant & Equipment Installation
+<title> Topic: Alternative/renewable Energy Plant Equipment Installation</title>
 
 
 <desc> Description:
 
 Document will identify planned or under-construction alternative/renewable
-energy plant or equipment installations.
+energy plant or equipment installations.</desc>
 
 
 <smry> Summary:
 
 Document will identify planned or under-construction alternative/renewable
-energy plant or equipment installations.
+energy plant or equipment installations.</smry>
 
 
 <narr> Narrative:
@@ -1890,53 +1890,53 @@ technology employed, projected capacity or output, location, and specific
 financial information, e.g. total cost, source of funding, estimated unit
 production costs, etc.  Document will not focus on political discussions of
 developing sources of alternate energy, nor will it focus on macroeconomic
-discussions of national energy needs.
+discussions of national energy needs.</narr>
 
 
 <con> Concept(s):
 
 1.  Alternative energy, renewable energy
 
-2.  Cogeneration, hydro power, solar energy, windmills, geothermal, biomass
+2.  Cogeneration, hydro power, solar energy, windmills, geothermal, biomass</con>
 
 
 <fac> Factor(s):
 
-<nat> Nationality:  U.S.
+<nat> Nationality:  U.S.</nat>
 
-<time> Time:  future
+<time> Time:  future</time>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 085
+<num> Number: 085</num>
 
 
-<dom> Domain:  Law and Government 
+<dom> Domain:  Law and Government </dom>
 
 
-<title> Topic:  Official Corruption
+<title> Topic:  Official Corruption</title>
 
 
 <desc> Description:
 
 Document will discuss allegations, or measures being taken against, corrupt
-public officials of any governmental jurisdiction worldwide.
+public officials of any governmental jurisdiction worldwide.</desc>
 
 
 <smry> Summary:
 
 Document will discuss allegations, or measures being taken against, corrupt
-public officials of any governmental jurisdiction worldwide.
+public officials of any governmental jurisdiction worldwide.</smry>
 
 
 <narr> Narrative:
@@ -1947,7 +1947,7 @@ anywhere in the world.  The allegations or charges must be specific, e.g.
 bribes taken >from a named group or individual with a given objective, rather
 than generalized allegations of endemic political corruption, or moves against
 corporate or private malfeasance (unless linked to an official corruption
-case).
+case).</narr>
 
 
 <con> Concept(s):
@@ -1955,41 +1955,41 @@ case).
 1.  Official corruption, public corruption
 
 2.  Bribery, prostitution, cover-up, undercover investigation,
-    influence-peddling, illegal payment, collusion
+    influence-peddling, illegal payment, collusion</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s): </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number:  086
+<num> Number:  086</num>
 
 
-<dom> Domain:  Finance
+<dom> Domain:  Finance</dom>
 
 
-<title> Topic:  Bank Failures
+<title> Topic:  Bank Failures</title>
 
 
 <desc> Description:
 
 Document will identify recent bank failures within the United States,
 specifying name, location, assets, and federal or state authorities taking
-action.
+action.</desc>
 
 
 <smry> Summary:
 
 Document will identify recent closings by the Federal Deposit Insurance
-Corporation of a failed commercial bank chartered within the U.S.
+Corporation of a failed commercial bank chartered within the U.S.</smry>
 
 
 <narr> Narrative:
@@ -1998,7 +1998,7 @@ A relevant document, in addition to giving specific identifying information on
 a failed bank (or banks), must be clear that the bank was chartered within the
 United State and that it is a bank, as opposed to another financial
 institution such as a savings and loan or credit union, and must specify the
-actions taken or being taken by the public authorities.
+actions taken or being taken by the public authorities.</narr>
 
 
 <con> Concept(s):
@@ -2006,47 +2006,47 @@ actions taken or being taken by the public authorities.
 1.  Bank failure
 
 2.  Federal Deposit Insurance Corporation, FDIC, Comptroller of the Currency,
-    state banking authorities, state bank regulators
+    state banking authorities, state bank regulators</con>
 
 
 <fac> Factor(s):
 
-<nat> Nationality:  U.S.
+<nat> Nationality:  U.S. </nat>
 
-<time>  Time:  current
+<time>  Time:  current </time>
 
 </fac>  
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 087
+<num> Number: 087</num>
 
 
-<dom> Domain: Law & Government 
+<dom> Domain: Law Government </dom>
 
 
 <title> Topic: Criminal Actions Against Officers of Failed
-               Financial Institutions
+               Financial Institutions</title>
 
 
 <desc> Description:
 
 Document will report on current criminal actions against officers of a failed
-U.S. financial institution.
+U.S. financial institution.</desc>
 
 
 <smry> Summary:
 
 Document will report on current criminal actions against officers of a failed
-U.S. banking institution (including all categories of banking).
+U.S. banking institution (including all categories of banking).</smry>
 
 
 <narr> Narrative:
@@ -2059,53 +2059,53 @@ may have been insured by either federal or state funds and may belong to any
 category of financial institution, e.g. bank, savings and loan, credit union,
 etc.  Although not essential, it would be preferable if the document provided
 such details on the case as specific crime, losses to insurance funds,
-penalties imposed, etc.
+penalties imposed, etc.</narr>
 
 
 <con> Concept(s):
 
-1.  FDIC, bank, thrift, savings & loan, bank
+1.  FDIC, bank, thrift, savings loan, bank
 
-2.  suit, trial, restitution, default, conspiracy, audit, fraud, felony
+2.  suit, trial, restitution, default, conspiracy, audit, fraud, felony</con>
 
 
 <fac> Factor(s):
 
-<nat> Nationality:  U.S.
+<nat> Nationality:  U.S.</nat>
 
-<time> Time:  current
+<time> Time:  current</time>
 
 </fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 088
+<num> Number: 088</num>
 
 
-<dom> Domain: International Economics 
+<dom> Domain: International Economics </dom>
 
 
-<title> Topic: Crude Oil Price Trends
+<title> Topic: Crude Oil Price Trends</title>
 
 
 <desc> Description:
 
 Document will provide quantitative data usable in charting international
-crude oil price trends.
+crude oil price trends.</desc>
 
 
 <smry> Summary:
 
 Document will provide quantitative data usable in charting international
-crude oil price trends.
+crude oil price trends.</smry>
 
 
 <narr> Narrative:
@@ -2123,7 +2123,7 @@ speculate about political and diplomatic moves related to the "official" OPEC
 price, but such information by itself is not directly relevant.  The best
 documents would be those which summarize and statistically analyze crude oil
 production and price data over a period of time, rather than those which
-simply report daily market numbers.
+simply report daily market numbers.</narr>
 
 
 <con> Concept(s):
@@ -2137,40 +2137,40 @@ simply report daily market numbers.
 3.  U.S., USSR, Mexico, Norway, Great Britain
 
 3.  West Texas Intermediate, North Sea Brent, Rotterdam spot, New York
-    Mercantile Exchange.
+    Mercantile Exchange.</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
-<def> Definition(s):
+<def> Definition(s):</def>
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 089
+<num> Number: 089</num>
 
 
-<dom> Domain: International Economics 
+<dom> Domain: International Economics </dom>
 
 
-<title> Topic: "Downstream" Investments by OPEC Member States
+<title> Topic: "Downstream" Investments by OPEC Member States</title>
 
 
 <desc> Description: 
 
 Document must identify an existing or pending investment by an OPEC member
-state in any "downstream" operation.
+state in any "downstream" operation.</desc>
 
 
 <smry> Summary:
 
 Document must identify an existing or pending investment by an OPEC member
-state in any "downstream" operation.
+state in any "downstream" operation.</smry>
 
 
 <narr> Narrative:
@@ -2181,7 +2181,7 @@ installation or enterprise.  The investment may be through a joint venture,
 acquisition, construction, or stock purchase of any operation in the refining,
 petrochemical, oil industry equipment manufacture, drilling and exploration,
 shipping, marketing and retail sales, or other ancillary "downstream"
-activity.
+activity.</narr>
 
 
 <con> Concept(s):
@@ -2194,45 +2194,45 @@ activity.
 
 3.  Kuwait Petroleum Co., Kuwait Investment Co.
 
-4.  Petroleos de Venezuela  
+4.  Petroleos de Venezuela  </con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
 <def> Definition(s):
 
 1.  "Downstream:" any petroleum industry activity which occurs after initial
-    production of crude oil, or which supports such production.
+    production of crude oil, or which supports such production.</def>
 
 
 </top>
  
 <top>
 
-<head> Tipster Topic Description
+<head> Tipster Topic Description</head>
 
 
-<num> Number: 090
+<num> Number: 090</num>
 
 
-<dom> Domain: International Economics 
+<dom> Domain: International Economics </dom>
 
 
-<title> Topic: Data on Proven Reserves of Oil & Natural Gas
-               Producers
+<title> Topic: Data on Proven Reserves of Oil Natural Gas
+               Producers</title>
 
 
 <desc> Description:
 
 Document will provide totals or specific data on changes to the proven reserve
-figures for any oil or natural gas producer.
+figures for any oil or natural gas producer.</desc>
 
 
 <smry> Summary:
 
 Document will provide totals or specific data on changes to the proven reserve
-figures for any oil or natural gas producer.
+figures for any oil or natural gas producer.</smry>
 
 
 <narr> Narrative:
@@ -2243,17 +2243,17 @@ figures used by any national or corporate entity which produces oil or natural
 gas.  The document should specify whether a change is due to such factors as
 new investment in drilling activity or oil field installations, depletions or
 losses, recalculations of existing figures, acquisition of other producers,
-etc.
+etc.</narr>
 
 
 <con> Concept(s):
 
 1. Proven reserve
 
-2. Oil, natural gas
+2. Oil, natural gas</con>
 
 
-<fac> Factor(s):
+<fac> Factor(s):</fac>
 
 
 <def> Definition(s):
@@ -2263,8 +2263,8 @@ etc.
     redefinition, a "proven reserve" can be distinguished from a probable or
     potential reserve as one which is ready for production near-term.  Oil or
     natural gas which can be economically extracted using installed equipment
-    employing current technology is considered to be a proven reserve.
+    employing current technology is considered to be a proven reserve.</def>
 
 </top>
- 
+</topics> 
 
