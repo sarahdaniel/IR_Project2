@@ -16,10 +16,12 @@ object Retrieval {
 	val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
 	val stopWords = io.Source.fromInputStream(stream).mkString.split(",").map(x => x.trim())
 
+	var numDocs = 0
 	def main(args: Array[String]) {
 
 		//val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-		val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/zips/"
+		//val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/zips/"
+		val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/testZips/"
 		val stream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
 		val bufferedSource2 = io.Source.fromInputStream(stream2)
 
@@ -56,14 +58,14 @@ object Retrieval {
 		println(logtfs);
 
 		val generalMap = MutMap[Int, Map[String, Double]]()
-		val numdocs: Int = df.size
+		val numdocs: Int = numDocs //df.size
 
 		for (query <- queries) {
 
 			println(query)
 
 			//document frequency of words in query
-			val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(df.size) - Math.log10(df.getOrElse(w, numdocs).toDouble)))).toMap
+			val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(df.size) - Math.log10(df.getOrElse(w, 1).toDouble)))).toMap
 
 			//println(dfquery)
 
@@ -107,11 +109,13 @@ object Retrieval {
 	def scanDocuments(folderpath: String, subsetwords: Set[String]) = {
 
 		val tipster = new TipsterCorpusIterator(folderpath) //new TipsterStream(folderpath)
-		println("Number of files in zips = " + tipster.length)
+		//println("Number of files in zips = " + tipster.length)
 
 		for (doc <- tipster) {
 
 			val tokens = doc.tokens.filter(!stopWords.contains(_)).map(p => p.toLowerCase)
+
+			numDocs += 1
 
 			//document frequency
 			df ++= tokens.distinct.filter(w => subsetwords.contains(w)).map(t => t -> (1 + df.getOrElse(t, 0)))
