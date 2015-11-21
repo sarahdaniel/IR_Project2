@@ -12,6 +12,7 @@ object Retrieval {
 
 	val df = MutMap[String, Int]()
 	val logtfs = MutMap[String, Map[String, Double]]()
+  val maxRetrievedDocs = 100
 
 	val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
 	val stopWords = io.Source.fromInputStream(stream).mkString.split(",").map(x => x.trim())
@@ -21,7 +22,8 @@ object Retrieval {
 
 		//val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
 		//val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/zips/"
-		val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/testZips/"
+		val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
+    
 		val stream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
 		val bufferedSource2 = io.Source.fromInputStream(stream2)
 
@@ -35,6 +37,10 @@ object Retrieval {
 				.groupBy(_._1)
 				.mapValues(_.map(_._2))
 
+       /* for(judg <- judgements)
+          for (doc <- judg._2)
+            println(judg._1 + " " +doc)*/
+            
 		//println(judgements)
 
 		//extract queries
@@ -52,20 +58,21 @@ object Retrieval {
 		val querywords = cleanwords.flatten.toSet
 
 		scanDocuments(zippath, querywords)
-		//scanDocuments("/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip2",querywords)
 
-		println(df);
-		println(logtfs);
+		//--println(df);
+    //--println("df size" + df.size);
 
-		val generalMap = MutMap[Int, Map[String, Double]]()
+    val generalMap = MutMap[Int, Seq[(String, Double)]]()
 		val numdocs: Int = numDocs //df.size
 
+    println("Num docs: "+numdocs);
+    
 		for (query <- queries) {
 
-			println(query)
+			//--println(query)
 
 			//document frequency of words in query
-			val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(df.size) - Math.log10(df.getOrElse(w, 1).toDouble)))).toMap
+			val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numdocs) - Math.log10(df.getOrElse(w, numdocs).toDouble)))).toMap
 
 			//println(dfquery)
 
@@ -85,7 +92,7 @@ object Retrieval {
 				//println(score)
 
 				//save only the best 100 documents for each query, otherwise too much memory occupation
-				if (queryMap.size == 100) {
+				if (queryMap.size == maxRetrievedDocs) {
 					val minscore = queryMap.reduceLeft((l, r) => if (r._2 < l._2) r else l)
 
 					if (score > minscore._2) { //remove min and add this one
@@ -97,14 +104,57 @@ object Retrieval {
 
 			//this map contains the best 100 documents for each query in qrels (so 40 x 100 entries)
 			// this map must be used to evaluation
-			generalMap += query._1 -> queryMap.toMap
-
-			//println(queryMap)
+      generalMap += query._1 -> queryMap.toSeq.sortBy(-_._2)
 
 		} //end for query
+    
+    
+    //PRINT FIRST 100 DOCUMENTS
+    val pw = new java.io.PrintWriter(new java.io.File("result.txt" ))
 
+    val orderedresult = generalMap.toSeq.sortBy(_._1)
+    for(query <- orderedresult)
+      for (doc <- query._2)
+        pw.println(query._1 + " " + doc._1 +" "+doc._2)
+        
+    pw.close
+    
+    evaluateModel(generalMap,judgements)
 		//println(generalMap)
 	}
+  
+   
+  def evaluateModel(generalMap :MutMap[Int, Seq[(String, Double)]], judgements:Map[String, Array[String]]){
+    
+     var totalTruePos : Double=0
+     val totalRetrieved = maxRetrievedDocs * judgements.size //100 docs for each query
+     var totalRelevant: Double=0
+     
+      for(query <- generalMap){
+                                                          
+        val retrievedDocs= (query._2).map({case(x,y) => x}) 
+        val relevantDocs= judgements.get(query._1.toString) match {case Some(doc) => doc}
+  
+        val truePos = (retrievedDocs intersect relevantDocs).size
+        println("TP: "+truePos)
+        
+        println("Retrieved: "+retrievedDocs.size)
+        println("Relevant: "+relevantDocs.size)
+        
+        val precisionQuery = truePos.toDouble/retrievedDocs.size
+        val recallQuery = truePos.toDouble/relevantDocs.size
+        
+        println(query._1 + " Prec: " + precisionQuery + " - Recall: " + recallQuery)
+        
+        totalTruePos += truePos
+        totalRelevant += relevantDocs.size
+      }
+      
+       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant)
+        //gen map   51 -> array[(doc1,10), (doc2,13)]
+        //judgenments = 51 -> array(doc1,doc2,doc3)
+        
+  }
 
 	def scanDocuments(folderpath: String, subsetwords: Set[String]) = {
 
@@ -113,10 +163,11 @@ object Retrieval {
 
 		for (doc <- tipster) {
 
-			val tokens = doc.tokens.filter(!stopWords.contains(_)).map(p => p.toLowerCase)
-
+			val tokens = doc.tokens.filter(!stopWords.contains(_))
+      
 			numDocs += 1
 
+      //println(numDocs)
 			//document frequency
 			df ++= tokens.distinct.filter(w => subsetwords.contains(w)).map(t => t -> (1 + df.getOrElse(t, 0)))
 
