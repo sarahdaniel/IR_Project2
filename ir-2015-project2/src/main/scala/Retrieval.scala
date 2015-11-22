@@ -5,15 +5,16 @@ import ch.ethz.dal.tinyir.processing.Tokenizer
 import collection.mutable.{ Map => MutMap }
 import ch.ethz.dal.tinyir.processing.TipsterCorpusIterator
 
-/**
- * @author ale
- */
-object Retrieval {
+object Retrieva{
+
+  val languageModel = false
+  val lam = 0.9 //used for the language model
 
   val df = MutMap[String, Int]()
   val logtfs = MutMap[String, Map[String, Double]]()
   val tfs = MutMap[String, Map[String, Double]]()
-  val docLengths = MutMap[String, Int]()
+  val docLengths = MutMap[String, Double]()
+  val collectionFrequencies = MutMap[String, Double]()
   val maxRetrievedDocs = 100
 
   val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
@@ -27,24 +28,18 @@ object Retrieval {
 //    val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
     val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
-    val stream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
-    val bufferedSource2 = io.Source.fromInputStream(stream2)
+    val qrelsStream: java.io.InputStream = getClass.getResourceAsStream("/qrels")
+    val qrelsBufferedSource = io.Source.fromInputStream(qrelsStream)
 
     //extract relevance judgements for each topic
     val judgements: Map[String, Array[String]] =
-      bufferedSource2.getLines()
+      qrelsBufferedSource.getLines()
         .filter(l => !l.endsWith("0"))
         .map(l => l.split(" "))
         .map(e => (e(0), e(2).replaceAll("-", "")))
         .toArray
         .groupBy(_._1)
         .mapValues(_.map(_._2))
-
-        for(judg <- judgements)
-          for (doc <- judg._2)
-            println(judg._1 + " " +doc)
-
-    //println(judgements)
 
     //extract queries
     val topicinputStream = getClass.getResourceAsStream("/topics")
@@ -60,54 +55,27 @@ object Retrieval {
     //set of all the words of the 40 queries
     val querywords = cleanwords.flatten.toSet
 
+    println(querywords)
+
     scanDocuments(zippath, querywords)
 
-    //--println(df);
-    //--println("df size" + df.size);
-
     val generalMap = MutMap[Int, Seq[(String, Double)]]()
-    val numdocs: Int = numDocs //df.size
 
-    println("Num docs: "+numdocs);
+    println("Num docs: "+ numDocs);
 
     for (query <- queries) {
+      var fullQueryMap = MutMap[String, Double]()
 
-      //--println(query)
+      if (languageModel) {
+        println("fullQueryMap size", fullQueryMap.size)
+        fullQueryMap = languageModelScore(query, lam)
+        println("fullQueryMap size", fullQueryMap.size)
 
-      //document frequency of words in query
-      val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numdocs) - Math.log10(df.getOrElse(w, numdocs).toDouble)))).toMap
-
-      //println(dfquery)
-
-      val queryMap = MutMap[String, Double]()
-
-      for (docprob <- logtfs) {
-
-        //term frequency of words in query
-        val tfquery = (query._2).map({ case (k) => (k, docprob._2 getOrElse (k, 0.0)) })
-
-        //println(tfquery)
-
-        //TF-IDF
-        val tfidf = dfquery.map({ case (k, v) => tfquery map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
-        val score = tfidf.sum
-        //println(tfidf)
-        //println(score)
-
-        //save only the best 100 documents for each query, otherwise too much memory occupation
-        if (queryMap.size == maxRetrievedDocs) {
-          val minscore = queryMap.reduceLeft((l, r) => if (r._2 < l._2) r else l)
-
-          if (score > minscore._2) { //remove min and add this one
-            queryMap -= minscore._1
-            queryMap += docprob._1 -> score
-          }
-        } else queryMap += docprob._1 -> score
+      }else{
+        fullQueryMap = termModelScore(query)
       }
 
-      //this map contains the best 100 documents for each query in qrels (so 40 x 100 entries)
-      // this map must be used to evaluation
-      generalMap += query._1 -> queryMap.toSeq.sortBy(-_._2)
+      generalMap += query._1 -> fullQueryMap.toSeq.sortBy(-_._2)
 
     } //end for query
 
@@ -122,7 +90,7 @@ object Retrieval {
 
     pw.close
 
-    evaluateModel(generalMap,judgements)
+    evaluateModel(generalMap, judgements)
     //println(generalMap)
   }
 
@@ -161,8 +129,7 @@ object Retrieval {
 
   def scanDocuments(folderpath: String, subsetwords: Set[String]) = {
 
-    val tipster = new TipsterCorpusIterator(folderpath) //new TipsterStream(folderpath)
-    //println("Number of files in zips = " + tipster.length)
+    val tipster = new TipsterCorpusIterator(folderpath)
 
     for (doc <- tipster) {
 
@@ -170,36 +137,101 @@ object Retrieval {
 
       numDocs += 1
 
-      //println(numDocs)
-      //document frequency
+      //document frequency - in how many docs is a word present?
       df ++= tokens.distinct.filter(w => subsetwords.contains(w)).map(t => t -> (1 + df.getOrElse(t, 0)))
-      docLengths += doc.name -> tokens.length
+      docLengths += doc.name -> tokens.length.toDouble
 
-
+      //keep only query words for the term freq counting
       val queryTokens = tokens.filter(w => subsetwords.contains(w))
 
-      //log of term frequency
-      //logtfs +=  doc.name -> TermFrequencies.logtf(tokens)
-//      logtfs += doc.name -> logtfSlides(tokens).filter(w => subsetwords.contains(w._1))
       val tfForDoc = tf(queryTokens)
       tfs += doc.name -> tfForDoc
+      collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.0))}
       logtfs += doc.name -> logtfSlides(tfForDoc)
 
     }
 
   }
 
+  /** Calculates the term frequencies for every term in doc */
   def tf(doc: List[String]): Map[String, Double] =
     doc.groupBy(identity).mapValues(l => l.length)
 
-//  def logtfSlides(doc: List[String]): Map[String, Double] =
-//    logtfSlides(tf(doc))
-
+  /** Calculates the logs (x + 1) of every value in the map */
   def logtfSlides(tf: Map[String, Double]): Map[String, Double] =
     tf.mapValues(v => log2(v.toDouble + 1.0))
 
   def log2(x: Double) = Math.log10(x) / Math.log10(2.0)
 
   def stripChars(s: String, ch: String) = s filterNot (ch contains _)
+
+  /** Find top 100 ranked docs for a query according to a language probabilistic model.
+     * @param query: queryID, query words tuple
+     * @param lam: Lambda value for the model
+     * @return MuMap with doc -> score
+     * */
+  def languageModelScore(query: (Int, List[String]) , lam:Double): MutMap[String, Double] = {
+     val mapWithScores = MutMap[String, Double]()
+     val totalWords = collectionFrequencies.foldLeft(0.0)(_+_._2)
+
+    for ((docName, docTF) <- tfs){
+      val docLength = docLengths.getOrElse(docName, 1.0)
+      var score = 0.0
+
+
+      for (word <- query._2) {
+        // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
+        val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
+        val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+        score += log2((1-lam)*estimatedProb + lam*priorProb)
+      }
+
+      appendWithMaxSize(mapWithScores, docName, score)
+
+    }
+    return mapWithScores
+  }
+
+    /** Find top 100 ranked docs for a query according to a TF.IDF model.*/
+  def termModelScore(query: (Int, List[String]) ): MutMap[String, Double] = {
+
+      //document frequency of words in query
+      val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numDocs) - Math.log10(df.getOrElse(w, numDocs).toDouble)))).toMap
+
+      //println(dfquery)
+
+      val queryMap = MutMap[String, Double]()
+
+      for (docprob <- logtfs) {
+
+        //term frequency of words in query
+        val tfquery = (query._2).map({ case (k) => (k, docprob._2 getOrElse (k, 0.0)) })
+
+            //TF-IDF
+            val tfidf = dfquery.map({ case (k, v) => tfquery map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
+            val score = tfidf.sum
+
+            appendWithMaxSize(queryMap, docprob._1, score)
+      }
+     return queryMap
+  }
+
+  /** This should keep the top 100 ranked documents per query.
+   *
+   *  If map size is greater than maxRetrievedDocs, remove the smallest score
+   *and append the new, bigger score. Otherwise just append.*/
+  def appendWithMaxSize(currentMap : MutMap[String, Double], docName:String, score:Double) = {
+
+      if (currentMap.size == maxRetrievedDocs) {
+        val minscore = currentMap.reduceLeft((l, r) => if (r._2 < l._2) r else l)
+
+        if (score > minscore._2){//remove min and add this one
+          currentMap -= minscore._1
+          currentMap += docName -> score
+        }
+      }else{
+        currentMap += docName -> score
+      }
+  }
 
 }
