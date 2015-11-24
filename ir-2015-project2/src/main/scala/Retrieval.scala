@@ -7,8 +7,11 @@ import ch.ethz.dal.tinyir.processing.TipsterCorpusIterator
 
 object Retrieva{
 
-  val languageModel = false
-  val lam = 0.9 //used for the language model
+  val languageModel = true
+  val lam = 0.3 //used for the language model
+  val fullSet = false
+
+
 
   val df = MutMap[String, Int]()
   val logtfs = MutMap[String, Map[String, Double]]()
@@ -16,6 +19,8 @@ object Retrieva{
   val docLengths = MutMap[String, Double]()
   val collectionFrequencies = MutMap[String, Double]()
   val maxRetrievedDocs = 100
+  var allEvaluatedDocs = Set[String]()
+  var parsedJudgements = Map[String, Array[String]]()
 
   val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
   val stopWords = io.Source.fromInputStream(stream).mkString.split(",").map(x => x.trim())
@@ -41,9 +46,25 @@ object Retrieva{
         .groupBy(_._1)
         .mapValues(_.map(_._2))
 
+
+    allEvaluatedDocs = judgements.values.flatten.toSet
+
+    //reset is broken in scala
+    val qrelsStream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
+    val qrelsBufferedSource2 = io.Source.fromInputStream(qrelsStream2)
+
+    parsedJudgements = qrelsBufferedSource2.getLines()
+        .map(l => l.split(" "))
+        .map(e => (e(0), e(2).replaceAll("-", "")))
+        .toArray
+        .groupBy(_._1)
+        .mapValues(_.map(_._2))
+
+    println(parsedJudgements.getOrElse("51", null).mkString(" "))
     //extract queries
     val topicinputStream = getClass.getResourceAsStream("/topics")
     val doc = new XMLDocument(topicinputStream)
+
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, ".,;:-?!%()[]°'\"\t\n\r\f123456789")).filter(!stopWords.contains(_)))
@@ -64,6 +85,7 @@ object Retrieva{
     println("Num docs: "+ numDocs);
 
     for (query <- queries) {
+      println(query._1)
       var fullQueryMap = MutMap[String, Double]()
 
       if (languageModel) {
@@ -137,12 +159,14 @@ object Retrieva{
 
       numDocs += 1
 
-      //document frequency - in how many docs is a word present?
-      df ++= tokens.distinct.filter(w => subsetwords.contains(w)).map(t => t -> (1 + df.getOrElse(t, 0)))
       docLengths += doc.name -> tokens.length.toDouble
 
       //keep only query words for the term freq counting
       val queryTokens = tokens.filter(w => subsetwords.contains(w))
+
+      //document frequency - in how many docs is a query word present?
+      df ++= queryTokens.distinct.map(t => t -> (1 + df.getOrElse(t, 0)))
+
 
       val tfForDoc = tf(queryTokens)
       tfs += doc.name -> tfForDoc
@@ -165,35 +189,44 @@ object Retrieva{
 
   def stripChars(s: String, ch: String) = s filterNot (ch contains _)
 
+
   /** Find top 100 ranked docs for a query according to a language probabilistic model.
      * @param query: queryID, query words tuple
      * @param lam: Lambda value for the model
      * @return MuMap with doc -> score
      * */
   def languageModelScore(query: (Int, List[String]) , lam:Double): MutMap[String, Double] = {
+     val relDocs = parsedJudgements.getOrElse(query._1.toString(), Array[String]()).toSet
+
+
      val mapWithScores = MutMap[String, Double]()
      val totalWords = collectionFrequencies.foldLeft(0.0)(_+_._2)
 
     for ((docName, docTF) <- tfs){
-      val docLength = docLengths.getOrElse(docName, 1.0)
-      var score = 0.0
+      if (fullSet || relDocs.contains(docName)){
+        val docLength = docLengths.getOrElse(docName, 1.0)
+            var score = 0.0
 
 
-      for (word <- query._2) {
-        // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
-        val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
-        val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
-        score += log2((1-lam)*estimatedProb + lam*priorProb)
+            for (word <- query._2) {
+              // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
+              val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
+                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+                  score += log2((1-lam)*estimatedProb + lam*priorProb)
+            }
+
+        appendWithMaxSize(mapWithScores, docName, score)
+
       }
-
-      appendWithMaxSize(mapWithScores, docName, score)
-
     }
     return mapWithScores
   }
 
+
     /** Find top 100 ranked docs for a query according to a TF.IDF model.*/
   def termModelScore(query: (Int, List[String]) ): MutMap[String, Double] = {
+
+      val relDocs = parsedJudgements.getOrElse(query._1.toString(), Array[String]()).toSet
 
       //document frequency of words in query
       val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numDocs) - Math.log10(df.getOrElse(w, numDocs).toDouble)))).toMap
@@ -203,16 +236,19 @@ object Retrieva{
       val queryMap = MutMap[String, Double]()
 
       for (docprob <- logtfs) {
+        if (fullSet || relDocs.contains(docprob._1)) {
 
-        //term frequency of words in query
-        val tfquery = (query._2).map({ case (k) => (k, docprob._2 getOrElse (k, 0.0)) })
+          //term frequency of words in query
+          val tfquery = (query._2).map({ case (k) => (k, docprob._2 getOrElse (k, 0.0)) })
 
-            //TF-IDF
-            val tfidf = dfquery.map({ case (k, v) => tfquery map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
-            val score = tfidf.sum
+              //TF-IDF
+              val tfidf = dfquery.map({ case (k, v) => tfquery map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
+              val score = tfidf.sum
 
-            appendWithMaxSize(queryMap, docprob._1, score)
+              appendWithMaxSize(queryMap, docprob._1, score)
+        }
       }
+
      return queryMap
   }
 
