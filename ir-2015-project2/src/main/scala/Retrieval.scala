@@ -2,15 +2,21 @@ import ch.ethz.dal.tinyir.io.TipsterStream
 import ch.ethz.dal.tinyir.lectures.TermFrequencies
 import ch.ethz.dal.tinyir.processing.XMLDocument
 import ch.ethz.dal.tinyir.processing.Tokenizer
-import collection.mutable.{ Map => MutMap }
-import ch.ethz.dal.tinyir.processing.TipsterCorpusIterator
+//import collection.mutable.{ Map => MutMap }
 
-object Retrieva{
+import com.github.aztek.porterstemmer.PorterStemmer
+import scala.collection.mutable.{ OpenHashMap => MutMap}
+import ch.ethz.dal.tinyir.processing.TipsterCorpusIterator
+import java.io.File
+
+//import net.didion.jwnl.JWNL
+
+object Retrieval{
 
   val languageModel = true
   val lam = 0.3 //used for the language model
   val fullSet = false
-
+  val maxRetrievedDocs = 100
 
 
   val df = MutMap[String, Int]()
@@ -18,7 +24,6 @@ object Retrieva{
   val tfs = MutMap[String, Map[String, Double]]()
   val docLengths = MutMap[String, Double]()
   val collectionFrequencies = MutMap[String, Double]()
-  val maxRetrievedDocs = 100
   var allEvaluatedDocs = Set[String]()
   var parsedJudgements = Map[String, Array[String]]()
 
@@ -33,68 +38,40 @@ object Retrieva{
 //    val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
     val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
-    val qrelsStream: java.io.InputStream = getClass.getResourceAsStream("/qrels")
-    val qrelsBufferedSource = io.Source.fromInputStream(qrelsStream)
+    val judgements = parseRelevantJudgements("/qrels")
+    parseJudgementsForEvaluation("/qrels")
+    val propertiesURL = getClass.getResource("/file_properties.xml")
 
-    //extract relevance judgements for each topic
-    val judgements: Map[String, Array[String]] =
-      qrelsBufferedSource.getLines()
-        .filter(l => !l.endsWith("0"))
-        .map(l => l.split(" "))
-        .map(e => (e(0), e(2).replaceAll("-", "")))
-        .toArray
-        .groupBy(_._1)
-        .mapValues(_.map(_._2))
+//    val wn = new Wordnet(new File(propertiesURL.getPath()))
 
 
-    allEvaluatedDocs = judgements.values.flatten.toSet
-
-    //reset is broken in scala
-    val qrelsStream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
-    val qrelsBufferedSource2 = io.Source.fromInputStream(qrelsStream2)
-
-    parsedJudgements = qrelsBufferedSource2.getLines()
-        .map(l => l.split(" "))
-        .map(e => (e(0), e(2).replaceAll("-", "")))
-        .toArray
-        .groupBy(_._1)
-        .mapValues(_.map(_._2))
-
-    println(parsedJudgements.getOrElse("51", null).mkString(" "))
     //extract queries
-    val topicinputStream = getClass.getResourceAsStream("/topics")
-    val doc = new XMLDocument(topicinputStream)
+    val (queries, querywords) = extractQueries("/topics")
 
-
-    val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
-    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, ".,;:-?!%()[]°'\"\t\n\r\f123456789")).filter(!stopWords.contains(_)))
-
-    val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
-
-    val queries = numbers.zip(cleanwords)
-
-    //set of all the words of the 40 queries
-    val querywords = cleanwords.flatten.toSet
+//   for (query <- queries; word <- query._2){
+//      println(PorterStemmer.stem(word))
+//    }
 
     println(querywords)
-
+    println("Scanning documents at path " + zippath)
     scanDocuments(zippath, querywords)
 
     val generalMap = MutMap[Int, Seq[(String, Double)]]()
 
-    println("Num docs: "+ numDocs);
+    println("Number of documents in collection: "+ numDocs);
+    println("Number of queries: ", queries.length)
 
     for (query <- queries) {
       println(query._1)
       var fullQueryMap = MutMap[String, Double]()
 
       if (languageModel) {
-        println("fullQueryMap size", fullQueryMap.size)
-        fullQueryMap = languageModelScore(query, lam)
-        println("fullQueryMap size", fullQueryMap.size)
+//        topDocs = rankWithLanguageModel(query, lam, 10)
+
+        fullQueryMap = rankWithLanguageModel(query, lam, maxRetrievedDocs)
 
       }else{
-        fullQueryMap = termModelScore(query)
+        fullQueryMap = rankWithTermModel(query, maxRetrievedDocs)
       }
 
       generalMap += query._1 -> fullQueryMap.toSeq.sortBy(-_._2)
@@ -114,6 +91,64 @@ object Retrieva{
 
     evaluateModel(generalMap, judgements)
     //println(generalMap)
+  }
+
+
+   /** Parses all relevant judgements
+    *  @return Map query-> list of relevant doc ids
+    *  */
+  def parseRelevantJudgements(relevanceJudgementsPath:String): Map[String, Array[String]] = {
+    val qrelsStream: java.io.InputStream = getClass.getResourceAsStream(relevanceJudgementsPath)
+    val qrelsBufferedSource = io.Source.fromInputStream(qrelsStream)
+
+    //extract relevance judgements for each topic
+    val judgements: Map[String, Array[String]] =
+      qrelsBufferedSource.getLines()
+        .filter(l => !l.endsWith("0"))
+        .map(l => l.split(" "))
+        .map(e => (e(0), e(2).replaceAll("-", "")))
+        .toArray
+        .groupBy(_._1)
+        .mapValues(_.map(_._2))
+
+    allEvaluatedDocs = judgements.values.flatten.toSet
+    return judgements
+  }
+
+
+  /** Parses all relevance judgement, collecting all judged relevant and
+   *irrelevant docs*/
+  def parseJudgementsForEvaluation(relevanceJudgementsPath:String){
+
+    //reset is broken in scala
+    val qrelsStream2: java.io.InputStream = getClass.getResourceAsStream(relevanceJudgementsPath)
+    val qrelsBufferedSource2 = io.Source.fromInputStream(qrelsStream2)
+
+    parsedJudgements = qrelsBufferedSource2.getLines()
+        .map(l => l.split(" "))
+        .map(e => (e(0), e(2).replaceAll("-", "")))
+        .toArray
+        .groupBy(_._1)
+        .mapValues(_.map(_._2))
+
+    }
+
+  /** Parses the topics file, extacting all topic IDs and titles, forming a
+   *set of query words from all topics/queries. */
+  def extractQueries(topicsPath:String): (Array[(Int, List[String])], Set[String]) = {
+    //extract queries
+    val topicinputStream = getClass.getResourceAsStream(topicsPath)
+    val doc = new XMLDocument(topicinputStream)
+
+    val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
+    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
+    val queries = numbers.zip(cleanwords)
+
+   //set of all the words of the 40 queries
+    val querywords = cleanwords.flatten.toSet
+
+    return (queries, querywords)
   }
 
 
@@ -155,7 +190,7 @@ object Retrieva{
 
     for (doc <- tipster) {
 
-      val tokens = doc.tokens.filter(!stopWords.contains(_))
+      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -163,6 +198,9 @@ object Retrieva{
 
       //keep only query words for the term freq counting
       val queryTokens = tokens.filter(w => subsetwords.contains(w))
+//      val queryTokens = tokens
+
+
 
       //document frequency - in how many docs is a query word present?
       df ++= queryTokens.distinct.map(t => t -> (1 + df.getOrElse(t, 0)))
@@ -172,6 +210,10 @@ object Retrieva{
       tfs += doc.name -> tfForDoc
       collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.0))}
       logtfs += doc.name -> logtfSlides(tfForDoc)
+
+//      if (numDocs%1000 ==0){
+//        println("Processed document: " + numDocs)
+//      }
 
     }
 
@@ -190,12 +232,13 @@ object Retrieva{
   def stripChars(s: String, ch: String) = s filterNot (ch contains _)
 
 
-  /** Find top 100 ranked docs for a query according to a language probabilistic model.
+  /** Find top <numDocsToRetrieve> ranked docs for a query according to a language probabilistic model.
      * @param query: queryID, query words tuple
      * @param lam: Lambda value for the model
+     * @param numDocsToRetrieve: number of documents to retrieve ordered by score
      * @return MuMap with doc -> score
      * */
-  def languageModelScore(query: (Int, List[String]) , lam:Double): MutMap[String, Double] = {
+  def rankWithLanguageModel(query: (Int, List[String]) , lam:Double, numDocsToRetrieve:Int): MutMap[String, Double] = {
      val relDocs = parsedJudgements.getOrElse(query._1.toString(), Array[String]()).toSet
 
 
@@ -215,7 +258,7 @@ object Retrieva{
                   score += log2((1-lam)*estimatedProb + lam*priorProb)
             }
 
-        appendWithMaxSize(mapWithScores, docName, score)
+        appendWithMaxSize(mapWithScores, docName, score, numDocsToRetrieve)
 
       }
     }
@@ -224,7 +267,7 @@ object Retrieva{
 
 
     /** Find top 100 ranked docs for a query according to a TF.IDF model.*/
-  def termModelScore(query: (Int, List[String]) ): MutMap[String, Double] = {
+  def rankWithTermModel(query: (Int, List[String]), numDocsToRetrieve:Int ): MutMap[String, Double] = {
 
       val relDocs = parsedJudgements.getOrElse(query._1.toString(), Array[String]()).toSet
 
@@ -245,7 +288,7 @@ object Retrieva{
               val tfidf = dfquery.map({ case (k, v) => tfquery map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
               val score = tfidf.sum
 
-              appendWithMaxSize(queryMap, docprob._1, score)
+              appendWithMaxSize(queryMap, docprob._1, score, numDocsToRetrieve)
         }
       }
 
@@ -256,9 +299,9 @@ object Retrieva{
    *
    *  If map size is greater than maxRetrievedDocs, remove the smallest score
    *and append the new, bigger score. Otherwise just append.*/
-  def appendWithMaxSize(currentMap : MutMap[String, Double], docName:String, score:Double) = {
+  def appendWithMaxSize(currentMap : MutMap[String, Double], docName:String, score:Double, numDocsToRetrieve:Int) = {
 
-      if (currentMap.size == maxRetrievedDocs) {
+      if (currentMap.size == numDocsToRetrieve) {
         val minscore = currentMap.reduceLeft((l, r) => if (r._2 < l._2) r else l)
 
         if (score > minscore._2){//remove min and add this one
