@@ -13,19 +13,21 @@ import java.io.File
 
 object Retrieval{
 
-  val languageModel = true
+  val languageModel = false
   val lam = 0.3 //used for the language model
-  val fullSet = false
+  val mu= 2000
+  val fullSet = true
   val maxRetrievedDocs = 100
 
 
   val df = MutMap[String, Int]()
-  val logtfs = MutMap[String, Map[String, Double]]()
+  //todelete -> val logtfs = MutMap[String, Map[String, Double]]()
   val tfs = MutMap[String, Map[String, Double]]()
   val docLengths = MutMap[String, Double]()
   val collectionFrequencies = MutMap[String, Double]()
   var allEvaluatedDocs = Set[String]()
   var parsedJudgements = Map[String, Array[String]]()
+  
 
   val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
   val stopWords = io.Source.fromInputStream(stream).mkString.split(",").map(x => x.trim())
@@ -35,24 +37,27 @@ object Retrieval{
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
     //val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/zips/"
-//    val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
-    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
+    val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
+    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
+    
+    //needed to score only on evaluated documents
     parseJudgementsForEvaluation("/qrels")
-    val propertiesURL = getClass.getResource("/file_properties.xml")
-
+    
+    //val propertiesURL = getClass.getResource("/file_properties.xml"
 //    val wn = new Wordnet(new File(propertiesURL.getPath()))
-
 
     //extract queries
     val (queries, querywords) = extractQueries("/topics")
 
-//   for (query <- queries; word <- query._2){
-//      println(PorterStemmer.stem(word))
-//    }
+    //println(queries);
+   for (query <- queries){
+     println(query._2)
+     
+   }
 
-    println(querywords)
+    //println(querywords)
     println("Scanning documents at path " + zippath)
     scanDocuments(zippath, querywords)
 
@@ -141,7 +146,8 @@ object Retrieval{
     val doc = new XMLDocument(topicinputStream)
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
-    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    //-----> PORTER STEMMER val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -164,6 +170,8 @@ object Retrieval{
         val relevantDocs= judgements.get(query._1.toString) match {case Some(doc) => doc}
 
         val truePos = (retrievedDocs intersect relevantDocs).size
+        
+        println("Query: " + query._1)
         println("TP: "+truePos)
 
         println("Retrieved: "+retrievedDocs.size)
@@ -172,7 +180,9 @@ object Retrieval{
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
 
-        println(query._1 + " Prec: " + precisionQuery + " - Recall: " + recallQuery)
+        println("Prec: " + precisionQuery + " - Recall: " + recallQuery)
+        
+        println("------------------------------------------------")
 
         totalTruePos += truePos
         totalRelevant += relevantDocs.size
@@ -190,7 +200,8 @@ object Retrieval{
 
     for (doc <- tipster) {
 
-      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
+      // ---> PORTER STEMMER val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
+      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -198,22 +209,17 @@ object Retrieval{
 
       //keep only query words for the term freq counting
       val queryTokens = tokens.filter(w => subsetwords.contains(w))
-//      val queryTokens = tokens
-
-
 
       //document frequency - in how many docs is a query word present?
       df ++= queryTokens.distinct.map(t => t -> (1 + df.getOrElse(t, 0)))
 
-
       val tfForDoc = tf(queryTokens)
       tfs += doc.name -> tfForDoc
       collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.0))}
-      logtfs += doc.name -> logtfSlides(tfForDoc)
 
-//      if (numDocs%1000 ==0){
-//        println("Processed document: " + numDocs)
-//      }
+      if (numDocs%1000 ==0){
+        println("Processed document: " + numDocs)
+     }
 
     }
 
@@ -250,14 +256,30 @@ object Retrieval{
         val docLength = docLengths.getOrElse(docName, 1.0)
             var score = 0.0
 
-
+            //JEKELIN-MERCER
             for (word <- query._2) {
               // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
               val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
                   val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
                   score += log2((1-lam)*estimatedProb + lam*priorProb)
             }
-
+        
+            //DIRICHLET SMOOTHING 
+            //log P(w|d) =  log( (tf + µ * P(w)/(|d| + µ))
+            for (word <- query._2) {
+              val tf =  docTF.getOrElse(word, 0.0)
+                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+                  score += log2((tf + mu * priorProb) / (docLength + mu))
+            }
+            
+            //TWO-STAGE SMOOTHING --> http://sifaka.cs.uiuc.edu/czhai/pub/sigir2002-twostage.pdf
+            //log P(w|d) =  log((1-lambda) * ((tf + µ * P(w)/(|d| + µ)) + lambda * P(w))
+            for (word <- query._2) {
+              val tf =  docTF.getOrElse(word, 0.0)
+                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+                  score += log2((1-lam)*((tf + mu * priorProb) / (docLength + mu)) + (lam * priorProb)  )
+            }
+            
         appendWithMaxSize(mapWithScores, docName, score, numDocsToRetrieve)
 
       }
@@ -278,11 +300,13 @@ object Retrieval{
 
       val queryMap = MutMap[String, Double]()
 
-      for (docprob <- logtfs) {
+      for (docprob <- tfs) {
         if (fullSet || relDocs.contains(docprob._1)) {
 
+          //log term frequency
+          val logtf = logtfSlides(docprob._2)
           //term frequency of words in query
-          val tfquery = (query._2).map({ case (k) => (k, docprob._2 getOrElse (k, 0.0)) })
+          val tfquery = (query._2).map({ case (k) => (k, logtf getOrElse (k, 0.0)) })
 
               //TF-IDF
               val tfidf = dfquery.map({ case (k, v) => tfquery map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
