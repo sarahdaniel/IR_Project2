@@ -36,7 +36,7 @@ object Retrieval{
   def main(args: Array[String]) {
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-    //val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/zips/"
+    //val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
     val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
     //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
