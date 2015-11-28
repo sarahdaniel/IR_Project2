@@ -36,7 +36,7 @@ object Retrieval{
   def main(args: Array[String]) {
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips_copy"
+//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
     //val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
     val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
@@ -228,7 +228,7 @@ object Retrieval{
         {
           if(relevantDocs.contains(docName)){
           //precission at rank k: 
-           avgPrecision += calculatePrecision(sortedDocRanks.take(k), relevantDocs)
+           avgPrecision += calculatePrecision(sortedDocRanks.take(k + 1), relevantDocs)
           }
         }
      
@@ -243,7 +243,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
+      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
+      
 //      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
