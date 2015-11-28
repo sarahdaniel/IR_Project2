@@ -17,7 +17,7 @@ object Retrieval{
   val lam = 0.3 //used for the language model
   val mu= 2000
   val fullSet = true
-  val maxRetrievedDocs = 100
+  val maxRetrievedDocs = 10
 
 
   val df = MutMap[String, Int]()
@@ -38,7 +38,7 @@ object Retrieval{
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
 //    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/testZips"
     //val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
-    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/subset"
+    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
@@ -147,8 +147,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -219,8 +219,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
-//      val tokens = doc.tokens.filter(!stopWords.contains(_))
+//      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
+      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -234,7 +234,9 @@ object Retrieval{
 
       val tfForDoc = tf(queryTokens)
       tfs += doc.name -> tfForDoc
-      collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.0))}
+
+      //smooth with 0.1 so that we don't get -infinity for VERY rare words
+      collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.1))}
 
       if (numDocs%1000 ==0){
         println("Processed document: " + numDocs)
@@ -279,7 +281,7 @@ object Retrieval{
 //            for (word <- query._2) {
 //              // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
 //              val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
-//                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+//                  val priorProb = collectionFrequencies.getOrElse(word, 0.1)/totalWords
 //                  score += log2((1-lam)*estimatedProb + lam*priorProb)
 //            }
 
@@ -287,7 +289,7 @@ object Retrieval{
 //            //log P(w|d) =  log( (tf + µ * P(w)/(|d| + µ))
 //            for (word <- query._2) {
 //              val tf =  docTF.getOrElse(word, 0.0)
-//                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+//                  val priorProb = collectionFrequencies.getOrElse(word, 0.1)/totalWords
 //                  score += log2((tf + mu * priorProb) / (docLength + mu))
 //            }
 //
@@ -295,7 +297,7 @@ object Retrieval{
             //log P(w|d) =  log((1-lambda) * ((tf + µ * P(w)/(|d| + µ)) + lambda * P(w))
             for (word <- query._2) {
               val tf =  docTF.getOrElse(word, 0.0)
-                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+                  val priorProb = collectionFrequencies.getOrElse(word, 0.1)/totalWords
                   score += log2((1-lam)*((tf + mu * priorProb) / (docLength + mu)) + (lam * priorProb)  )
             }
 
