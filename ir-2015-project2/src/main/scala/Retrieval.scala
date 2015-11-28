@@ -36,9 +36,9 @@ object Retrieval{
   def main(args: Array[String]) {
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/testZips"
+//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips_copy"
     //val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
-    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/subset"
+    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
@@ -148,7 +148,7 @@ object Retrieval{
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
     val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -164,7 +164,8 @@ object Retrieval{
      var totalTruePos : Double=0
      val totalRetrieved = maxRetrievedDocs * judgements.size //100 docs for each query
      var totalRelevant: Double=0
-     var totalF1: Double =  0
+     var totalF1: Double =  0.0
+     var meanAveragePrecision: Double = 0.0
 
       for(query <- generalMap){
 
@@ -181,34 +182,57 @@ object Retrieval{
 
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
-        val f1 = (2.0 * precisionQuery *  recallQuery) / (precisionQuery *  recallQuery)
 
-        val ap = 0.0//calculateAveragePrecision()
+        var f1 = 0.0
+        if(precisionQuery!= 0 & recallQuery != 0)
+        {
+          f1 = (2.0 * precisionQuery *  recallQuery) / (precisionQuery +  recallQuery)
+          }
 
-        println("Prec: " + precisionQuery + " - Recall: " + recallQuery)
+        val ap = calculateAveragePrecision(query._2, relevantDocs)
+
+        println("Prec: " + precisionQuery + " - Recall: " + recallQuery + " - F1: " + f1 + " Average Precision: " + ap)
 
         println("------------------------------------------------")
 
         totalTruePos += truePos
         totalRelevant += relevantDocs.size
         totalF1 += f1
+        
+        meanAveragePrecision += ap
       }
 
-       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + "Total F1: " + totalF1/(generalMap.size))
+       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + " Total F1: " + totalF1/(generalMap.size) + " Mean Average Precision: " + meanAveragePrecision/generalMap.size)
         //gen map   51 -> array[(doc1,10), (doc2,13)]
         //judgenments = 51 -> array(doc1,doc2,doc3)
 
   }
 
-  def calculateAveragePrecision(numRetrievedDocs: Int): Double =
+  def calculatePrecision(docRanks: Seq[(String, Double)], relevantDocs:Seq[String]): Double=
+  {
+      
+      val retrievedDocs= docRanks.map({case(x,y) => x})
+       
+      val truePos = (retrievedDocs intersect relevantDocs).size
+      val precision = truePos.toDouble/retrievedDocs.size
+       
+
+    return precision
+  }
+  def calculateAveragePrecision(docRanks: Seq[(String, Double)], relevantDocs:Seq[String]): Double =
   {
      var avgPrecision : Double = 0.0
+     val sortedDocRanks  = docRanks.sortBy(_._2)
 
-        for( k <- 1 to numRetrievedDocs)
+        for( ((docName, score),k) <- sortedDocRanks.zipWithIndex)
         {
-            //precission at rank k:
+          if(relevantDocs.contains(docName)){
+          //precission at rank k: 
+           avgPrecision += calculatePrecision(sortedDocRanks.take(k), relevantDocs)
+          }
         }
-     return avgPrecision
+     
+     return avgPrecision/relevantDocs.size
 
   }
 
@@ -234,7 +258,9 @@ object Retrieval{
 
       val tfForDoc = tf(queryTokens)
       tfs += doc.name -> tfForDoc
-      collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.0))}
+
+      //smooth with 0.1 so that we don't get -infinity for VERY rare words
+      collectionFrequencies ++= tfForDoc.map{ case (term, freq) => term -> (freq + collectionFrequencies.getOrElse(term, 0.1))}
 
       if (numDocs%1000 ==0){
         println("Processed document: " + numDocs)
@@ -279,7 +305,7 @@ object Retrieval{
 //            for (word <- query._2) {
 //              // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
 //              val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
-//                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+//                  val priorProb = collectionFrequencies.getOrElse(word, 0.1)/totalWords
 //                  score += log2((1-lam)*estimatedProb + lam*priorProb)
 //            }
 
@@ -287,7 +313,7 @@ object Retrieval{
 //            //log P(w|d) =  log( (tf + µ * P(w)/(|d| + µ))
 //            for (word <- query._2) {
 //              val tf =  docTF.getOrElse(word, 0.0)
-//                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+//                  val priorProb = collectionFrequencies.getOrElse(word, 0.1)/totalWords
 //                  score += log2((tf + mu * priorProb) / (docLength + mu))
 //            }
 //
@@ -295,7 +321,7 @@ object Retrieval{
             //log P(w|d) =  log((1-lambda) * ((tf + µ * P(w)/(|d| + µ)) + lambda * P(w))
             for (word <- query._2) {
               val tf =  docTF.getOrElse(word, 0.0)
-                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+                  val priorProb = collectionFrequencies.getOrElse(word, 0.1)/totalWords
                   score += log2((1-lam)*((tf + mu * priorProb) / (docLength + mu)) + (lam * priorProb)  )
             }
 
