@@ -36,7 +36,7 @@ object Retrieval{
   def main(args: Array[String]) {
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/testZips"
+//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips_copy"
     //val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
     val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
@@ -147,8 +147,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -165,6 +165,7 @@ object Retrieval{
      val totalRetrieved = maxRetrievedDocs * judgements.size //100 docs for each query
      var totalRelevant: Double=0
      var totalF1: Double =  0.0
+     var meanAveragePrecision: Double = 0.0
 
       for(query <- generalMap){
 
@@ -188,32 +189,50 @@ object Retrieval{
           f1 = (2.0 * precisionQuery *  recallQuery) / (precisionQuery +  recallQuery)
           }
 
-        val ap = 0.0//calculateAveragePrecision()
+        val ap = calculateAveragePrecision(query._2, relevantDocs)
 
-        println("Prec: " + precisionQuery + " - Recall: " + recallQuery + " - F1: " + f1)
+        println("Prec: " + precisionQuery + " - Recall: " + recallQuery + " - F1: " + f1 + " Average Precision: " + ap)
 
         println("------------------------------------------------")
 
         totalTruePos += truePos
         totalRelevant += relevantDocs.size
         totalF1 += f1
+        
+        meanAveragePrecision += ap
       }
 
-       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + " Total F1: " + totalF1/(generalMap.size))
+       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + " Total F1: " + totalF1/(generalMap.size) + " Mean Average Precision: " + meanAveragePrecision/generalMap.size)
         //gen map   51 -> array[(doc1,10), (doc2,13)]
         //judgenments = 51 -> array(doc1,doc2,doc3)
 
   }
 
-  def calculateAveragePrecision(numRetrievedDocs: Int): Double =
+  def calculatePrecision(docRanks: Seq[(String, Double)], relevantDocs:Seq[String]): Double=
+  {
+      
+      val retrievedDocs= docRanks.map({case(x,y) => x})
+       
+      val truePos = (retrievedDocs intersect relevantDocs).size
+      val precision = truePos.toDouble/retrievedDocs.size
+       
+
+    return precision
+  }
+  def calculateAveragePrecision(docRanks: Seq[(String, Double)], relevantDocs:Seq[String]): Double =
   {
      var avgPrecision : Double = 0.0
+     val sortedDocRanks  = docRanks.sortBy(_._2)
 
-        for( k <- 1 to numRetrievedDocs)
+        for( ((docName, score),k) <- sortedDocRanks.zipWithIndex)
         {
-            //precission at rank k:
+          if(relevantDocs.contains(docName)){
+          //precission at rank k: 
+           avgPrecision += calculatePrecision(sortedDocRanks.take(k), relevantDocs)
+          }
         }
-     return avgPrecision
+     
+     return avgPrecision/relevantDocs.size
 
   }
 
@@ -224,8 +243,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-//      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
-      val tokens = doc.tokens.filter(!stopWords.contains(_))
+      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
+//      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
