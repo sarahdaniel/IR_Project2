@@ -2,8 +2,10 @@ import ch.ethz.dal.tinyir.io.TipsterStream
 import ch.ethz.dal.tinyir.lectures.TermFrequencies
 import ch.ethz.dal.tinyir.processing.XMLDocument
 import ch.ethz.dal.tinyir.processing.Tokenizer
+import ch.ethz.dal.tinyir.processing.QueryTokenizer
 import collection.mutable.{ Map => MutMap }
 import ch.ethz.dal.tinyir.processing.TipsterCorpusIterator
+import com.github.aztek.porterstemmer.PorterStemmer
 
 /**
  * @author ale
@@ -35,7 +37,7 @@ object RetrievalOrig {
 
 		//val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
 		//val zippath = "/Users/sarahdanielabdelmessih/Documents/ETH/Fall2015/InformationRetrieval_workspace/IR1/IR_Project2/ir-2015-project2/src/main/resources/zips/"
-		val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
+		val zippath = "/Users/ale/IR/zipsAll"
     
 		val stream2: java.io.InputStream = getClass.getResourceAsStream("/qrels")
 		val bufferedSource2 = io.Source.fromInputStream(stream2)
@@ -61,11 +63,16 @@ object RetrievalOrig {
 		val doc = new XMLDocument(topicinputStream)
 
 		val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
-		val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
-
+		//------val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+     val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    
 		val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
 
 		val queries = numbers.zip(cleanwords)
+    
+    for (query <- queries){
+     println(query._2)   
+   }
 
 		//set of all the words of the 40 queries
 		val querywords = cleanwords.flatten.toSet
@@ -115,8 +122,8 @@ object RetrievalOrig {
  
         }else if(okapibm25){       
         //3) OKAPI BM25
-          val b= 0.75
-          val k= 1.5
+          val b= 0.35
+          val k= 1
           val dl= docLengths.getOrElse(docprob._1,0)   
           val okapitf= (docprob._2).mapValues(v => ((k+1)*v) / (k * ((1-b) +b* dl/avgdl) +v))
         
@@ -210,7 +217,8 @@ object RetrievalOrig {
 
 		for (doc <- tipster) {
 
-			val tokens = doc.tokens.filter(!stopWords.contains(_))
+			//----------val tokens = doc.tokens.filter(!stopWords.contains(_))
+      val tokens = doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
       
 			numDocs += 1
 
