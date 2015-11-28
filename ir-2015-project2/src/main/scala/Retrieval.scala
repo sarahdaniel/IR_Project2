@@ -13,7 +13,7 @@ import java.io.File
 
 object Retrieval{
 
-  val languageModel = false
+  val languageModel = true
   val lam = 0.3 //used for the language model
   val mu= 2000
   val fullSet = true
@@ -36,8 +36,8 @@ object Retrieval{
   def main(args: Array[String]) {
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-    //val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
-    val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
+    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/testZips"
+    //val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
     //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
@@ -94,7 +94,7 @@ object Retrieval{
 
     pw.close
 
-    evaluateModel(generalMap, judgements)
+    evaluateModel(generalMap, judgements, queries.toMap)
     //println(generalMap)
   }
 
@@ -146,8 +146,9 @@ object Retrieval{
     val doc = new XMLDocument(topicinputStream)
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
-    //-----> PORTER STEMMER val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+    //-----> PORTER STEMMER 
+    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    //val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -158,11 +159,12 @@ object Retrieval{
   }
 
 
-  def evaluateModel(generalMap :MutMap[Int, Seq[(String, Double)]], judgements:Map[String, Array[String]]){
+  def evaluateModel(generalMap :MutMap[Int, Seq[(String, Double)]], judgements:Map[String, Array[String]], queries:Map[Int, List[String]]){
 
      var totalTruePos : Double=0
      val totalRetrieved = maxRetrievedDocs * judgements.size //100 docs for each query
      var totalRelevant: Double=0
+     var totalF1: Double =  0  
 
       for(query <- generalMap){
 
@@ -171,7 +173,7 @@ object Retrieval{
 
         val truePos = (retrievedDocs intersect relevantDocs).size
         
-        println("Query: " + query._1)
+        println("Query: " + query._1 + " " + queries.get(query._1))
         println("TP: "+truePos)
 
         println("Retrieved: "+retrievedDocs.size)
@@ -179,6 +181,9 @@ object Retrieval{
 
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
+        val f1 = (2.0 * precisionQuery *  recallQuery) / (precisionQuery *  recallQuery)
+        
+        val ap = 0.0//calculateAveragePrecision()
 
         println("Prec: " + precisionQuery + " - Recall: " + recallQuery)
         
@@ -186,12 +191,25 @@ object Retrieval{
 
         totalTruePos += truePos
         totalRelevant += relevantDocs.size
+        totalF1 += f1
       }
 
-       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant)
+       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + "Total F1: " + totalF1/(generalMap.size))
         //gen map   51 -> array[(doc1,10), (doc2,13)]
         //judgenments = 51 -> array(doc1,doc2,doc3)
 
+  }
+  
+  def calculateAveragePrecision(numRetrievedDocs: Int): Double =
+  {
+     var avgPrecision : Double = 0.0
+     
+        for( k <- 1 to numRetrievedDocs)
+        {
+            //precission at rank k:           
+        }
+     return avgPrecision
+    
   }
 
   def scanDocuments(folderpath: String, subsetwords: Set[String]) = {
@@ -200,8 +218,9 @@ object Retrieval{
 
     for (doc <- tipster) {
 
-      // ---> PORTER STEMMER val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
-      val tokens = doc.tokens.filter(!stopWords.contains(_))
+      // ---> PORTER STEMMER 
+      val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
+//      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -257,21 +276,21 @@ object Retrieval{
             var score = 0.0
 
             //JEKELIN-MERCER
-            for (word <- query._2) {
-              // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
-              val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
-                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
-                  score += log2((1-lam)*estimatedProb + lam*priorProb)
-            }
+//            for (word <- query._2) {
+//              // log P(w|d) = log( (1-lambda)*P`(w|d) + lambda*P(w) )
+//              val estimatedProb =  docTF.getOrElse(word, 0.0) / docLength
+//                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+//                  score += log2((1-lam)*estimatedProb + lam*priorProb)
+//            }
         
-            //DIRICHLET SMOOTHING 
-            //log P(w|d) =  log( (tf + µ * P(w)/(|d| + µ))
-            for (word <- query._2) {
-              val tf =  docTF.getOrElse(word, 0.0)
-                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
-                  score += log2((tf + mu * priorProb) / (docLength + mu))
-            }
-            
+//            //DIRICHLET SMOOTHING 
+//            //log P(w|d) =  log( (tf + µ * P(w)/(|d| + µ))
+//            for (word <- query._2) {
+//              val tf =  docTF.getOrElse(word, 0.0)
+//                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
+//                  score += log2((tf + mu * priorProb) / (docLength + mu))
+//            }
+//            
             //TWO-STAGE SMOOTHING --> http://sifaka.cs.uiuc.edu/czhai/pub/sigir2002-twostage.pdf
             //log P(w|d) =  log((1-lambda) * ((tf + µ * P(w)/(|d| + µ)) + lambda * P(w))
             for (word <- query._2) {
