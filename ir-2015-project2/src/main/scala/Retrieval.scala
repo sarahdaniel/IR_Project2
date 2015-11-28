@@ -1,7 +1,7 @@
 import ch.ethz.dal.tinyir.io.TipsterStream
 import ch.ethz.dal.tinyir.lectures.TermFrequencies
 import ch.ethz.dal.tinyir.processing.XMLDocument
-import ch.ethz.dal.tinyir.processing.Tokenizer
+import ch.ethz.dal.tinyir.processing.QueryTokenizer
 //import collection.mutable.{ Map => MutMap }
 
 import com.github.aztek.porterstemmer.PorterStemmer
@@ -27,7 +27,7 @@ object Retrieval{
   val collectionFrequencies = MutMap[String, Double]()
   var allEvaluatedDocs = Set[String]()
   var parsedJudgements = Map[String, Array[String]]()
-  
+
 
   val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
   val stopWords = io.Source.fromInputStream(stream).mkString.split(",").map(x => x.trim())
@@ -36,15 +36,15 @@ object Retrieval{
   def main(args: Array[String]) {
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/testZips"
+//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/testZips"
     //val zippath = "/Users/ale/workspace/inforetrieval/documents/searchengine/zipsAll"
-    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
+    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/subset"
 
     val judgements = parseRelevantJudgements("/qrels")
-    
+
     //needed to score only on evaluated documents
     parseJudgementsForEvaluation("/qrels")
-    
+
     //val propertiesURL = getClass.getResource("/file_properties.xml"
 //    val wn = new Wordnet(new File(propertiesURL.getPath()))
 
@@ -54,7 +54,7 @@ object Retrieval{
     //println(queries);
    for (query <- queries){
      println(query._2)
-     
+
    }
 
     //println(querywords)
@@ -146,9 +146,9 @@ object Retrieval{
     val doc = new XMLDocument(topicinputStream)
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
-    //-----> PORTER STEMMER 
-    val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    //val cleanwords = words.map(w => Tokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+    //-----> PORTER STEMMER
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -164,7 +164,7 @@ object Retrieval{
      var totalTruePos : Double=0
      val totalRetrieved = maxRetrievedDocs * judgements.size //100 docs for each query
      var totalRelevant: Double=0
-     var totalF1: Double =  0  
+     var totalF1: Double =  0
 
       for(query <- generalMap){
 
@@ -172,7 +172,7 @@ object Retrieval{
         val relevantDocs= judgements.get(query._1.toString) match {case Some(doc) => doc}
 
         val truePos = (retrievedDocs intersect relevantDocs).size
-        
+
         println("Query: " + query._1 + " " + queries.get(query._1))
         println("TP: "+truePos)
 
@@ -182,11 +182,11 @@ object Retrieval{
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
         val f1 = (2.0 * precisionQuery *  recallQuery) / (precisionQuery *  recallQuery)
-        
+
         val ap = 0.0//calculateAveragePrecision()
 
         println("Prec: " + precisionQuery + " - Recall: " + recallQuery)
-        
+
         println("------------------------------------------------")
 
         totalTruePos += truePos
@@ -199,17 +199,17 @@ object Retrieval{
         //judgenments = 51 -> array(doc1,doc2,doc3)
 
   }
-  
+
   def calculateAveragePrecision(numRetrievedDocs: Int): Double =
   {
      var avgPrecision : Double = 0.0
-     
+
         for( k <- 1 to numRetrievedDocs)
         {
-            //precission at rank k:           
+            //precission at rank k:
         }
      return avgPrecision
-    
+
   }
 
   def scanDocuments(folderpath: String, subsetwords: Set[String]) = {
@@ -218,7 +218,7 @@ object Retrieval{
 
     for (doc <- tipster) {
 
-      // ---> PORTER STEMMER 
+      // ---> PORTER STEMMER
       val tokens = doc.tokens.map(PorterStemmer.stem(_)).filter(!stopWords.contains(_))
 //      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
@@ -282,15 +282,15 @@ object Retrieval{
 //                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
 //                  score += log2((1-lam)*estimatedProb + lam*priorProb)
 //            }
-        
-//            //DIRICHLET SMOOTHING 
+
+//            //DIRICHLET SMOOTHING
 //            //log P(w|d) =  log( (tf + µ * P(w)/(|d| + µ))
 //            for (word <- query._2) {
 //              val tf =  docTF.getOrElse(word, 0.0)
 //                  val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
 //                  score += log2((tf + mu * priorProb) / (docLength + mu))
 //            }
-//            
+//
             //TWO-STAGE SMOOTHING --> http://sifaka.cs.uiuc.edu/czhai/pub/sigir2002-twostage.pdf
             //log P(w|d) =  log((1-lambda) * ((tf + µ * P(w)/(|d| + µ)) + lambda * P(w))
             for (word <- query._2) {
@@ -298,7 +298,7 @@ object Retrieval{
                   val priorProb = collectionFrequencies.getOrElse(word, 0.0)/totalWords
                   score += log2((1-lam)*((tf + mu * priorProb) / (docLength + mu)) + (lam * priorProb)  )
             }
-            
+
         appendWithMaxSize(mapWithScores, docName, score, numDocsToRetrieve)
 
       }
