@@ -17,7 +17,7 @@ object Retrieval{
   val lam = 0.3 //used for the language model
   val mu= 2000
   val fullSet = true
-  val maxRetrievedDocs = 10
+  val maxRetrievedDocs = 100
 
 
   val df = MutMap[String, Int]()
@@ -164,7 +164,7 @@ object Retrieval{
      var totalTruePos : Double=0
      val totalRetrieved = maxRetrievedDocs * judgements.size //100 docs for each query
      var totalRelevant: Double=0
-     var totalF1: Double =  0.0  
+     var totalF1: Double =  0.0
 
       for(query <- generalMap){
 
@@ -172,7 +172,7 @@ object Retrieval{
         val relevantDocs= judgements.get(query._1.toString) match {case Some(doc) => doc}
 
         val truePos = (retrievedDocs intersect relevantDocs).size
-        
+
         println("Query: " + query._1 + " " + queries.get(query._1))
         println("TP: "+truePos)
 
@@ -181,22 +181,22 @@ object Retrieval{
 
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
-        
+
         var f1 = 0.0
         if(precisionQuery!= 0 & recallQuery != 0)
-        { 
+        {
           f1 = (2.0 * precisionQuery *  recallQuery) / (precisionQuery +  recallQuery)
           }
-        
+
         val ap = 0.0//calculateAveragePrecision()
 
         println("Prec: " + precisionQuery + " - Recall: " + recallQuery + " - F1: " + f1)
-        
+
         println("------------------------------------------------")
 
         totalTruePos += truePos
         totalRelevant += relevantDocs.size
-        totalF1 += f1 
+        totalF1 += f1
       }
 
        println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + " Total F1: " + totalF1/(generalMap.size))
@@ -204,17 +204,17 @@ object Retrieval{
         //judgenments = 51 -> array(doc1,doc2,doc3)
 
   }
-  
+
   def calculateAveragePrecision(numRetrievedDocs: Int): Double =
   {
      var avgPrecision : Double = 0.0
-     
+
         for( k <- 1 to numRetrievedDocs)
         {
-            //precission at rank k:           
+            //precission at rank k:
         }
      return avgPrecision
-    
+
   }
 
   def scanDocuments(folderpath: String, subsetwords: Set[String]) = {
