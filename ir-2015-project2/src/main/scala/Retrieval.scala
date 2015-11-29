@@ -12,14 +12,14 @@ import java.io.File
 
 object Retrieval{
 
-  val languageModel = false
-  
+  val languageModel = true
+
   //term based model parameters
   val b= 0.35
   val k= 1
-    
+
   //language model parameters
-  val lam = 0.1 
+  val lam = 0.1
   val mu= 1000
 
   val maxRetrievedDocs = 100
@@ -27,7 +27,7 @@ object Retrieval{
   val df = MutMap[String, Int]()
   val tfs = MutMap[String, Map[String, Double]]()
   val docLengths = MutMap[String, Double]()
-  val collectionFrequencies = MutMap[String, Double]() 
+  val collectionFrequencies = MutMap[String, Double]()
   var totalLength =0.0
 
 
@@ -39,8 +39,8 @@ object Retrieval{
 
     //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
 //    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
-    val zippath = "/Users/ale/IR/zipsAll"
-    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
+//    val zippath = "/Users/ale/IR/zipsAll"
+    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
@@ -63,7 +63,7 @@ object Retrieval{
     println("Number of documents in collection: "+ numDocs);
     println("Number of queries: "+ queries.length)
 
-    
+
     for (query <- queries) {
       println(query._1)
       var fullQueryMap = MutMap[String, Double]()
@@ -128,8 +128,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -179,7 +179,7 @@ object Retrieval{
         totalTruePos += truePos
         totalRelevant += relevantDocs.size
         totalF1 += f1
-        
+
         meanAveragePrecision += ap
       }
 
@@ -189,12 +189,12 @@ object Retrieval{
 
   def calculatePrecision(docRanks: Seq[(String, Double)], relevantDocs:Seq[String]): Double=
   {
-      
+
       val retrievedDocs= docRanks.map({case(x,y) => x})
-       
+
       val truePos = (retrievedDocs intersect relevantDocs).size
       val precision = truePos.toDouble/retrievedDocs.size
-       
+
 
     return precision
   }
@@ -205,11 +205,11 @@ object Retrieval{
         for( ((docName, score),k) <- docRanks.zipWithIndex)
         {
           if(relevantDocs.contains(docName)){
-          //precision at rank k: 
+          //precision at rank k:
            avgPrecision += calculatePrecision(docRanks.take(k + 1), relevantDocs)
           }
         }
-     
+
      return avgPrecision/relevantDocs.size
 
   }
@@ -221,13 +221,13 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-      //val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
-      val tokens = doc.tokens.filter(!stopWords.contains(_))
+      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
+//      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
       docLengths += doc.name -> tokens.length.toDouble
-      
+
       totalLength += tokens.length
 
       //keep only query words for the term freq counting
@@ -270,7 +270,7 @@ object Retrieval{
 
 
      val mapWithScores = MutMap[String, Double]()
-     val totalWords = collectionFrequencies.foldLeft(0.0)(_+_._2)
+     val totalWords = docLengths.foldLeft(0.0)(_+_._2)
 
     for ((docName, docTF) <- tfs){
         val docLength = docLengths.getOrElse(docName, 1.0)
@@ -303,15 +303,15 @@ object Retrieval{
       for (docprob <- tfs) {
 
           //OKAPI BM25
-          val dl= docLengths.getOrElse(docprob._1,0.0)   
+          val dl= docLengths.getOrElse(docprob._1,0.0)
           val okapitf= (docprob._2).mapValues(v => ((k+1)*v) / (k * ((1-b) +b* dl/avgdl) +v))
-        
+
           val okapidf = dfquery.mapValues(v=> Math.log((numDocs - v +0.5)/(v+0.5)))
-          
+
           val tfidf = okapidf.map({ case (k, v) => okapitf map ({ case (x, y) => if (k == x) v * y else 0.0 }) }).flatten
 
           val score = tfidf.sum
-          
+
          appendWithMaxSize(queryMap, docprob._1, score)
       }
 
