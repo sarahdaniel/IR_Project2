@@ -12,7 +12,7 @@ import java.io.File
 
 object Retrieval{
 
-  val languageModel = true
+  val languageModel = false
 
   //term based model parameters
   val b= 0.35
@@ -128,8 +128,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -210,7 +210,7 @@ object Retrieval{
           }
         }
 
-     return avgPrecision/relevantDocs.size
+     return avgPrecision/math.min(relevantDocs.size, 100)
 
   }
 
@@ -221,8 +221,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
-//      val tokens = doc.tokens.filter(!stopWords.contains(_))
+//      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
+      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -292,9 +292,12 @@ object Retrieval{
 
     /** Find top 100 ranked docs for a query according to a TF.IDF model.*/
   def rankWithTermModel(query: (Int, List[String]), avgdl: Double): MutMap[String, Double] = {
-
+      def ceilingF(df:Int) = if (df>numDocs/2) numDocs else df
       //document frequency of words in query
-      val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numDocs) - Math.log10(df.getOrElse(w, numDocs).toDouble)))).toMap
+//      val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numDocs) - Math.log10(df.getOrElse(w, numDocs).toDouble)))).toMap
+      val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> ceilingF(df.getOrElse(w, numDocs)).toDouble)).toMap
+
+
 
       //println(dfquery)
 
