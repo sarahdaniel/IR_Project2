@@ -36,10 +36,10 @@ object Retrieval{
   var numDocs = 0
   def main(args: Array[String]) {
 
-    val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
+//    val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
 //    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
 //    val zippath = "/Users/ale/IR/zipsAll"
-    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
+    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
@@ -128,8 +128,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -149,7 +149,7 @@ object Retrieval{
      var meanAveragePrecision: Double = 0.0
 
      val resultMap = generalMap.toSeq.sortBy(_._1)
-     
+
       for(query <- resultMap){
 
         val retrievedDocs= (query._2).map({case(x,y) => x})
@@ -225,8 +225,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
-      //val tokens = doc.tokens.filter(!stopWords.contains(_))
+//      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
+      val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -296,8 +296,10 @@ object Retrieval{
 
     /** Find top 100 ranked docs for a query according to a TF.IDF model.*/
   def rankWithTermModel(query: (Int, List[String]), avgdl: Double): MutMap[String, Double] = {
-    
-      def ceilingF(df:Int) = if (df>numDocs/2) numDocs else df
+
+      //if a word occurs in more than half of the documents, it starts penalizing the document. This is not desired.
+      def ceilingF(df:Int) = if (df>numDocs/2) numDocs/2 else df
+
       //document frequency of words in query
       val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> ceilingF(df.getOrElse(w, numDocs)).toDouble)).toMap
 

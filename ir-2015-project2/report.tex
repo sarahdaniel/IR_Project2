@@ -60,6 +60,8 @@ IDF(q) = \log{\frac{N - df(q) + 0.5}{df(q) + 0.5}},
 \end{equation}
 $N$ - documents in collection, $df(q)$ - \#docs in which q occurs
 
+The IDF has the property that if a word occurs in more than half of the documents, the log term becomes negative, thus a document is penalized for containing the query word. This should not happen as we have removed stop words from the documents and queries, but just in case we limit the IDF to 0 from the bottom but capping the document frequency to half of the number of documents. This method has been used in other similar projects.
+
 We experimented with different values for the model parameters and found the optimal values to be 0.35 and 1 for $b$ and $k$ respectively.
 
 \subsection{Language model}
