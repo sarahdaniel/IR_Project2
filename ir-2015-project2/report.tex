@@ -31,16 +31,16 @@ In this project, we have build a system which retrieves a ranked list of documen
 The system retrieves the ranked document lists  for multiple queries simultaneously. The process flow consists of several steps:
 \begin{enumerate}
 \item extract queries and relevance judgements from the files provided.
-\item scan the collection of documents in a streaming manner, using TipsterCorpusIterator and build up maps with term and collection frequencies for the query words, inverse document frequencies and document lengths. This will be used by the different models to evaluate the relevance of a document.
+\item scan the collection of documents in a streaming manner, using \textit{TipsterCorpusIterator} and build up maps with term and collection frequencies for the query words, inverse document frequencies and document lengths. This will be used by the different models to evaluate the relevance of a document.
 
 \item for every query, calculate the score of every document in the collection and keep the top 100 documents in a map. The score is calculated either using the term-based model or the language model depending on the value of the boolean parameter "languageModel".
 
 \item print the resulting ranking to a text file
 
-\item evaluate the system's performance in terms of P, R, $F_1$ and MAP for the test set
+\item evaluate the system's performance in terms of P, R, $F_1$ and MAP for the training set.
 \end{enumerate}
 
-Both the queries and the documents are tokenized by splitting on various standard characters, stopwords are removed and then each word is stemmed. In the case of query words which contain hyphens, we have decided to keep both the hyphenated word and the individual terms to increase the chance of finding the term in the collection as queries are usually very short.
+Both the queries and the documents are tokenized by splitting on various standard characters, stop words are removed and then each word is stemmed using the \textit{PorterStemmer}. In the case of query words which contain hyphens, we have decided to keep both the hyphenated word and the individual terms to increase the chance of finding the term in the collection as queries are usually very short.
 
 \section{Models}
 We have experimented with various models and here we describe the best performing ones with the optimal parameters based on the test queries.
@@ -68,7 +68,7 @@ For the language model, we used the standard probabilistic scheme, where $P(q|d)
 P(q|d) = \prod_{w_i\in q} P(w_i|d)
 \label{queryProb} 
 \end{equation}
-We used the observed term frequencies in the collection to estimate the posterior probabilities of the query words given a document - $\hat{P}(w_i|d)$. However, as not all query words occur in all documents, for the likelihood $P(w_i|d)$ we experimented with different types of collection smoothing - Jelinek-Mercer, Dirichlet and two-stage smoothing which combines both \footnote{Zhai, Chengxiang, and John Lafferty. "A study of smoothing methods for language models applied to information retrieval." ACM Transactions on Information Systems (TOIS) 22.2 (2004): 179-214.}. The most effective was the two-stage smoothing as defined in equation \ref{twoStage}.
+We used the observed term frequencies in the collection to estimate the posterior probabilities of the query words given a document - $\hat{P}(w_i|d)$. However, as not all query words occur in all documents, for the likelihood $P(w_i|d)$ we experimented with different types of collection smoothing - Jelinek-Mercer, Dirichlet and two-stage smoothing which combines both \footnote{Zhai, Chengxiang, and John Lafferty. "A study of smoothing methods for language models applied to information retrieval." ACM Transactions on Information Systems (TOIS) 22.2 (2004): 179-214.}. We ended up using the two-stage smoothing as defined in equation \ref{twoStage} because it proved to be the most effective on the training data.
 \begin{equation}
 log{P(w_i|d)} = log\Big[(1-\lambda)\frac{\hat{P}(w_i|d) + \mu*P(w_i)}{|d| + \mu} + \lambda P(w_i)\Big],
 \label{twoStage}
@@ -81,6 +81,6 @@ The optimal values were determined to be 0.1 for $\lambda$, which is expected gi
 
 
 \section{Evaluation on training data}
-To evaluate our model, we have used the provided \textit{qrels} statements. Any document not explicitly stated as relevant in the relevance judgements is assumed to be irrelevant, thus the scores represent worst-case behaviour in terms of accuracy. For each query we report the precision ($P$), recall ($R$), the harmonic mean $F_1$ and the $AP$, as well as the MAP for the whole system. All reported values are at rank 100 and the total number of relevant documents is assumed to be $min(TP+FP, 100)$ for the average precision calculations.
+To evaluate our model, we have used the provided \textit{qrels} statements. Any document not explicitly stated as relevant in the relevance judgements is assumed to be irrelevant, thus the scores represent worst-case behaviour in terms of accuracy. For each query we report the precision ($P$), recall ($R$), the harmonic mean $F_1$ and the $AP$, as well as the MAP for the whole system. All reported values are at rank 100 and the total number of relevant documents is assumed to be $min(TP+FN, 100)$ for the average precision calculations.
 
 \end{document} 
