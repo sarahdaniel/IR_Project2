@@ -12,17 +12,17 @@ import java.io.File
 
 object Retrieval{
 
-  val languageModel = false
+  val languageModel = false // if false -> term base model; if true ->language model
+  val trainingset = true //if false -> test set; if true -> training set
+  val maxRetrievedDocs = 100
 
-  //term based model parameters
+  //term based model parameters (OKAPI BM25)
   val b= 0.35
   val k= 1
 
-  //language model parameters
+  //language model parameters (MLE with 2-stage smoothing)
   val lam = 0.1
   val mu= 1000
-
-  val maxRetrievedDocs = 100
 
   val df = MutMap[String, Int]()
   val tfs = MutMap[String, Map[String, Double]]()
@@ -30,17 +30,16 @@ object Retrieval{
   val collectionFrequencies = MutMap[String, Double]()
   var totalLength =0.0
 
-
   val stream: java.io.InputStream = getClass.getResourceAsStream("/stopwords.txt")
   val stopWords = io.Source.fromInputStream(stream).mkString.split(",").map(x => x.trim())
 
   var numDocs = 0
   def main(args: Array[String]) {
 
-    //val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
+    val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
 //    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
 //    val zippath = "/Users/ale/IR/zipsAll"
-    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
+    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
@@ -93,8 +92,9 @@ object Retrieval{
 
     pw.close
 
-    evaluateModel(generalMap, judgements, queries.toMap)
-    //println(generalMap)
+    if(trainingset)
+      evaluateModel(generalMap, judgements, queries.toMap)
+
   }
 
 
@@ -128,8 +128,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -148,18 +148,21 @@ object Retrieval{
      var totalF1: Double =  0.0
      var meanAveragePrecision: Double = 0.0
 
-      for(query <- generalMap){
+     val resultMap = generalMap.toSeq.sortBy(_._1)
+     
+      for(query <- resultMap){
 
         val retrievedDocs= (query._2).map({case(x,y) => x})
         val relevantDocs= judgements.get(query._1.toString) match {case Some(doc) => doc}
 
         val truePos = (retrievedDocs intersect relevantDocs).size
 
-        println("Query: " + query._1 + " " + queries.get(query._1))
-        println("TP: "+truePos)
+        //println("Query: " + query._1 + " " + queries.get(query._1))
+        println("Query: " + query._1)
+        //println("TP: "+truePos)
 
-        println("Retrieved: "+retrievedDocs.size)
-        println("Relevant: "+relevantDocs.size)
+       // println("Retrieved: "+retrievedDocs.size)
+        //println("Relevant: "+relevantDocs.size)
 
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
@@ -172,7 +175,7 @@ object Retrieval{
 
         val ap = calculateAveragePrecision(query._2, relevantDocs)
 
-        println("Prec: " + precisionQuery + " - Recall: " + recallQuery + " - F1: " + f1 + " Average Precision: " + ap)
+        println("Precision: " + precisionQuery + " - Recall: " + recallQuery + " - F1: " + f1 + " Average Precision: " + ap)
 
         println("------------------------------------------------")
 
@@ -183,7 +186,8 @@ object Retrieval{
         meanAveragePrecision += ap
       }
 
-       println("Total Prec: " + totalTruePos/totalRetrieved + " - TotalRecall: " + totalTruePos/totalRelevant + " Total F1: " + totalF1/(generalMap.size) + " Mean Average Precision: " + meanAveragePrecision/generalMap.size)
+       println("TOTAL VALUES")
+       println("Total Precision: " + totalTruePos/totalRetrieved + " - Total Recall: " + totalTruePos/totalRelevant + " Total F1: " + totalF1/(generalMap.size) + " Mean Average Precision: " + meanAveragePrecision/generalMap.size)
 
   }
 
@@ -221,8 +225,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-//      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
-      val tokens = doc.tokens.filter(!stopWords.contains(_))
+      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
+      //val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
@@ -292,14 +296,10 @@ object Retrieval{
 
     /** Find top 100 ranked docs for a query according to a TF.IDF model.*/
   def rankWithTermModel(query: (Int, List[String]), avgdl: Double): MutMap[String, Double] = {
+    
       def ceilingF(df:Int) = if (df>numDocs/2) numDocs else df
       //document frequency of words in query
-//      val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> (Math.log10(numDocs) - Math.log10(df.getOrElse(w, numDocs).toDouble)))).toMap
       val dfquery: Map[String, Double] = (for (w <- query._2) yield (w -> ceilingF(df.getOrElse(w, numDocs)).toDouble)).toMap
-
-
-
-      //println(dfquery)
 
       val queryMap = MutMap[String, Double]()
 
