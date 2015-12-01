@@ -11,9 +11,14 @@ import java.io.File
 
 
 object Retrieval{
+  
+  val usage = "Usage: Retrieval <zippath>"
 
+  //******** SETTING VARIABLES **********  
   val languageModel = false // if false -> term base model; if true ->language model
   val trainingset = true //if false -> test set; if true -> training set
+  
+  // ***********************************
   val maxRetrievedDocs = 100
 
   //term based model parameters (OKAPI BM25)
@@ -35,11 +40,14 @@ object Retrieval{
 
   var numDocs = 0
   def main(args: Array[String]) {
+    
+    if (args.length == 0) {
+      println(usage);
 
-//    val zippath = "/Users/ale/workspace/inforetrieval/Documents/searchengine/testzip"
-//    val zippath = "/Users/sarahdanielabdelmessih/git/IR_Project2/ir-2015-project2/src/main/resources/zips"
-//    val zippath = "/Users/ale/IR/zipsAll"
-    val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
+    }else{
+
+    val zippath = args(0);
+    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
@@ -47,10 +55,10 @@ object Retrieval{
     val (queries, querywords) = extractQueries("/topics")
 
     //println(queries);
-   for (query <- queries){
-     println(query._2)
+   //for (query <- queries){
+     //println(query._2)
 
-   }
+   //}
 
     //println(querywords)
     println("Scanning documents at path " + zippath)
@@ -94,6 +102,7 @@ object Retrieval{
 
     if(trainingset)
       evaluateModel(generalMap, judgements, queries.toMap)
+    }
 
   }
 
@@ -128,8 +137,8 @@ object Retrieval{
 
     val words = doc.title.split("Topic:").map(p => p.trim()).filter(p => p != "")
     //-----> PORTER STEMMER
-//    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
-    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
+    val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)).map(PorterStemmer.stem(_)))
+    //val cleanwords = words.map(w => QueryTokenizer.tokenize(stripChars(w, "123456789)(\"")).filter(!stopWords.contains(_)))
     val numbers = doc.number.split("Number:").map(p => p.trim()).filter(p => p != "").map(p => p.toInt)
     val queries = numbers.zip(cleanwords)
 
@@ -157,12 +166,7 @@ object Retrieval{
 
         val truePos = (retrievedDocs intersect relevantDocs).size
 
-        //println("Query: " + query._1 + " " + queries.get(query._1))
         println("Query: " + query._1)
-        //println("TP: "+truePos)
-
-       // println("Retrieved: "+retrievedDocs.size)
-        //println("Relevant: "+relevantDocs.size)
 
         val precisionQuery = truePos.toDouble/retrievedDocs.size
         val recallQuery = truePos.toDouble/relevantDocs.size
@@ -225,8 +229,8 @@ object Retrieval{
     for (doc <- tipster) {
 
       // ---> PORTER STEMMER
-//      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
-      val tokens = doc.tokens.filter(!stopWords.contains(_))
+      val tokens =   doc.tokens.filter(!stopWords.contains(_)).map(PorterStemmer.stem(_))
+      //val tokens = doc.tokens.filter(!stopWords.contains(_))
 
       numDocs += 1
 
