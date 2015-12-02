@@ -15,8 +15,8 @@ object Retrieval{
   val usage = "Usage: Retrieval <zippath>"
 
   //******** SETTING VARIABLES **********  
-  val languageModel = false // if false -> term base model; if true ->language model
-  val trainingset = true //if false -> test set; if true -> training set
+  val languageModel = true // if false -> term base model; if true ->language model
+  val trainingset = false //if false -> test set; if true -> training set
   
   // ***********************************
   val maxRetrievedDocs = 100
@@ -52,7 +52,7 @@ object Retrieval{
     val judgements = parseRelevantJudgements("/qrels")
 
     //extract queries
-    val (queries, querywords) = extractQueries("/topics")
+    val (queries, querywords) = extractQueries("/topics-final-fixed")
 
     //println(queries);
    //for (query <- queries){
