@@ -47,20 +47,13 @@ object Retrieval{
     }else{
 
     val zippath = args(0);
-    //val zippath = "/home/mim/Documents/Uni/IR_Project2/ir-2015-project2/src/main/resources/zips"
 
     val judgements = parseRelevantJudgements("/qrels")
 
     //extract queries
     val (queries, querywords) = extractQueries("/topics-final-fixed")
 
-    //println(queries);
-   //for (query <- queries){
-     //println(query._2)
 
-   //}
-
-    //println(querywords)
     println("Scanning documents at path " + zippath)
     scanDocuments(zippath, querywords)
 
