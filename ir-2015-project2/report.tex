@@ -432,7 +432,7 @@ where \textit{zippath} is the only command parameter and contains the path of th
 
 \subsection{languageModel and trainingSet variables}
 The \textit{Retrieval} object has 2 member variables that must be set to false or true in order to decide which model to use for the score of the queries and whether the queries 
-that have to be processed are part of a training or of a test set. The explanation of the values to use is included in the code.
+that have to be processed are part of a training or of a test set. The explanation of the values to use is included in the code. The files with the topics must be a well-formed XML. We add missing tags where needed.
 
 \subsection{Log and result}
 During the execution the program prints to the console one line every 1000 processed documents. We introduced this counter to have a perception of the speed of the process and we found useful to leave it in the code. When the program finishes, in case of an execution on a training set, the performance values are displayed in the console. In both cases (training or test set), the rank of the first 100 documents for each query is saved in the file \textit{result.txt}, created in the execution folder.
